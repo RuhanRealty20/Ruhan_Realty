@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /properties?*
+Sitemap: https://ruhanrealty.com/sitemap.xml
+

@@ -1,0 +1,4 @@
+import { describe,expect,it } from 'vitest';
+import request from 'supertest';
+import { app } from '../src/app.js';
+describe('public API',()=>{it('returns health in consistent envelope',async()=>{const res=await request(app).get('/api/v1/health');expect(res.status).toBe(200);expect(res.body.success).toBe(true);expect(res.body.data.status).toBe('ok')});it('returns an empty unconfigured IDX result',async()=>{const res=await request(app).get('/api/v1/properties');expect(res.status).toBe(200);expect(res.body.data.providerStatus).toBe('unconfigured');expect(res.body.data.items).toEqual([])});it('rejects malformed lead input',async()=>{const res=await request(app).post('/api/v1/leads').send({name:'x'});expect(res.status).toBe(400);expect(res.body.error.code).toBe('VALIDATION_ERROR')});it('protects CRM endpoints',async()=>{const res=await request(app).get('/api/v1/leads');expect(res.status).toBe(401)})});

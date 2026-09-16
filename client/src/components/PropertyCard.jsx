@@ -1,0 +1,5 @@
+import { ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { track } from '../services/analytics';
+
+export function PropertyCard({ property }) { return <article className="card property-card"><Link to={`/properties/${property.slug}`} onClick={()=>track('property_view',{propertyId:property.id})}><div className="property-image">{property.image&&<img src={property.image} alt={property.imageAlt||`Exterior of ${property.title}`} width="640" height="420" loading="lazy"/>}<span className="property-badge">{property.status}</span></div><div className="property-body"><p className="property-price">{property.price}</p><div className="property-facts"><span>{property.beds} beds</span><span>{property.baths} baths</span><span>{property.type}</span></div><h3>{property.title}</h3><p className="muted">{property.location}</p><span className="eyebrow" style={{marginTop:'1rem'}}>Ask Ruhan <ArrowUpRight size={14}/></span></div></Link><small style={{display:'block',padding:'0 1.2rem 1rem',color:'#777'}}>Listing courtesy and MLS attribution supplied by approved IDX provider.</small></article> }

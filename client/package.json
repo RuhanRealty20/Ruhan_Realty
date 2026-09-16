@@ -1,0 +1,33 @@
+{
+  "name": "@ruhan-realty/client",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "assets:optimize": "node scripts/optimizeAssets.js",
+    "sitemap": "node scripts/generateSitemap.js",
+    "prebuild": "npm run assets:optimize && npm run sitemap",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --max-warnings=0"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "latest",
+    "lucide-react": "latest",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router-dom": "latest",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "latest",
+    "@vitejs/plugin-react": "latest",
+    "eslint": "latest",
+    "eslint-plugin-react-hooks": "latest",
+    "eslint-plugin-react-refresh": "latest",
+    "globals": "latest",
+    "sharp": "latest",
+    "vite": "8.3.0"
+  }
+}

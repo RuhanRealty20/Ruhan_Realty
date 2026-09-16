@@ -1,0 +1,38 @@
+{
+  "name": "@ruhan-realty/server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "lint": "eslint . --max-warnings=0",
+    "test": "vitest run --pool=threads --maxWorkers=1",
+    "seed:admin": "node scripts/seedAdmin.js",
+    "seed:demo": "node scripts/seedDemo.js"
+  },
+  "dependencies": {
+    "argon2": "latest",
+    "compression": "latest",
+    "cookie-parser": "latest",
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "express-rate-limit": "latest",
+    "helmet": "latest",
+    "jsonwebtoken": "latest",
+    "mongoose": "latest",
+    "nodemailer": "latest",
+    "pino": "latest",
+    "pino-http": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@eslint/js": "latest",
+    "eslint": "latest",
+    "globals": "latest",
+    "supertest": "latest",
+    "vitest": "latest"
+  },
+  "engines": { "node": ">=24.0.0" }
+}

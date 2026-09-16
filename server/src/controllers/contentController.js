@@ -1,0 +1,6 @@
+import { Content } from '../models/Content.js';
+import { pagination, ok } from '../utils/api.js';
+
+export async function publicList(req,res){const {page,limit,skip}=pagination(req.query);const type=req.params.type.toUpperCase();const query={type,status:'PUBLISHED',publishDate:{$lte:new Date()}};const [items,total]=await Promise.all([Content.find(query).sort({publishDate:-1}).skip(skip).limit(limit).lean(),Content.countDocuments(query)]);return ok(res,{items,pagination:{page,limit,total,pages:Math.ceil(total/limit)}})}
+export async function adminList(req,res){const {page,limit,skip}=pagination(req.query);const filter=req.query.type?{type:req.query.type}:{};const [items,total]=await Promise.all([Content.find(filter).sort({updatedAt:-1}).skip(skip).limit(limit).lean(),Content.countDocuments(filter)]);return ok(res,{items,pagination:{page,limit,total,pages:Math.ceil(total/limit)}})}
+export async function save(req,res){const doc=req.params.id?await Content.findByIdAndUpdate(req.params.id,{...req.body,updatedBy:req.user._id},{new:true,runValidators:true}):await Content.create({...req.body,createdBy:req.user._id,updatedBy:req.user._id});return res.status(req.params.id?200:201).json({success:true,data:doc})}

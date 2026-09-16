@@ -1,0 +1,3 @@
+import { marketPlaceholders } from '../data/site';
+
+export function MarketSnapshot({ data=[] }) { const stats=data.length?data:marketPlaceholders.map(([label,value])=>({label,value,source:'Not connected',geography:'Miami-Dade County',reportingPeriod:'—',lastUpdated:'—'}));return <div className="stats-grid">{stats.slice(0,4).map(stat=><article className="stat" key={stat.label}><span className="stat-value">{stat.value}</span><strong>{stat.label}</strong><small style={{display:'block',marginTop:'.7rem'}}>Source: {stat.source}<br/>{stat.geography} · {stat.reportingPeriod}<br/>Updated {stat.lastUpdated}</small></article>)}</div> }

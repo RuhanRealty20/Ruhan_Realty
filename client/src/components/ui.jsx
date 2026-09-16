@@ -1,0 +1,16 @@
+import { ChevronDown, ChevronRight, X } from 'lucide-react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { track } from '../services/analytics';
+
+export function CTAButton({ to, children, variant='primary', event='CTA_click', className='', ...props }) {
+  const classes = `btn btn-${variant} ${className}`;
+  const onClick = () => track(event, { label:typeof children === 'string' ? children : undefined, destination:to });
+  return to ? <Link className={classes} to={to} onClick={onClick} {...props}>{children}</Link> : <button className={classes} onClick={onClick} {...props}>{children}</button>;
+}
+export function Breadcrumbs({ items=[] }) { return <nav aria-label="Breadcrumb" className="breadcrumbs"><Link to="/">Home</Link>{items.map((item) => <span key={item.label}>/ {item.to ? <Link to={item.to}>{item.label}</Link> : item.label}</span>)}</nav>; }
+export function PageHero({ eyebrow, title, intro, children }) { return <header className="page-hero"><div className="container"><Breadcrumbs items={[{label:title}]} /><span className="eyebrow">{eyebrow}</span><h1 className="section-title" style={{maxWidth:850,margin:'1rem 0'}}>{title}</h1>{intro && <p className="lead">{intro}</p>}{children}</div></header>; }
+export function LoadingSkeleton({ lines=3 }) { return <div className="skeleton" role="status" aria-label="Loading">{Array.from({length:lines},(_,i)=><span key={i} style={{width:i === lines-1 ? '64%' : '100%'}} />)}</div>; }
+export function Modal({ open, onClose, title, children }) { if (!open) return null; return <div role="presentation" style={{position:'fixed',inset:0,zIndex:100,background:'rgba(5,14,20,.72)',display:'grid',placeItems:'center',padding:'1rem'}} onMouseDown={onClose}><section role="dialog" aria-modal="true" aria-label={title} className="card" style={{maxWidth:720,width:'100%',maxHeight:'90vh',overflow:'auto',padding:'1.5rem'}} onMouseDown={(e)=>e.stopPropagation()}><button aria-label="Close" onClick={onClose} style={{float:'right',border:0,background:'none'}}><X /></button><h2 className="section-title" style={{fontSize:'2rem'}}>{title}</h2>{children}</section></div>; }
+export function FAQAccordion({ items }) { const [open,setOpen] = useState(0); return <div>{items.map((item,i)=><div className="accordion-item" key={item.q}><button className="accordion-button" aria-expanded={open===i} onClick={()=>setOpen(open===i?-1:i)}>{item.q}<ChevronDown size={18}/></button>{open===i&&<div className="accordion-panel">{item.a}</div>}</div>)}</div>; }
+export function SectionHeading({ eyebrow, title, intro, action }) { return <div style={{display:'flex',justifyContent:'space-between',alignItems:'end',gap:'2rem',marginBottom:'2.5rem',flexWrap:'wrap'}}><div><span className="eyebrow">{eyebrow}</span><h2 className="section-title" style={{maxWidth:760,margin:'.8rem 0'}}>{title}</h2>{intro&&<p className="lead">{intro}</p>}</div>{action&&<CTAButton to={action.to} variant="outline">{action.label}<ChevronRight size={16}/></CTAButton>}</div>; }
