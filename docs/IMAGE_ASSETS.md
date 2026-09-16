@@ -18,3 +18,20 @@ The built-in image-generation tool also created four coordinated, non-MLS editor
 - `luxury-interior-editorial.*` — understated waterfront interior with limestone, light oak, neutral furniture and golden-hour bay views.
 
 All prompts requested photorealistic-natural editorial photography with no people, text, watermarks, logos, listing claims or trademarked buildings. Source PNG files and optimized AVIF/WebP derivatives are stored in `client/src/assets/`.
+
+## Miami architectural sketch backgrounds
+
+The built-in image-generation tool created two original transparent line-art backgrounds for light public-site sections:
+
+- `miami-sketch-background.*` — panoramic palms, Biscayne Bay, a distant Miami-inspired skyline and a contemporary waterfront residence.
+- `miami-sketch-background-mobile.*` — portrait companion composition with the illustration held to the edges around a clear content area.
+
+Both source PNG files and optimized AVIF/WebP derivatives are stored in `client/src/assets/`. They are decorative marketing illustrations, not MLS property representations.
+
+Final desktop prompt:
+
+> Original ultra-wide website section background for a premium Miami real-estate brand. Extremely light architectural pencil-and-ink sketch with graceful palm fronds entering from the upper corners, a refined contemporary Miami residence along the lower-right edge, and a faint ocean horizon with a distant Brickell-like skyline along the lower-left edge. Sophisticated fine graphite and warm sepia line art, generous clean negative space through the middle, monochrome warm sand, pale taupe and whisper-soft navy-gray. Genuinely transparent background, very low contrast, no text, logos, people, vehicles, UI, bright colors or watermark.
+
+Final mobile prompt:
+
+> Original portrait companion background in the same delicate warm graphite-and-sepia architectural style. Palm canopy at the upper-left, a contemporary Miami Beach residence along the lower-right edge, faint water and skyline at the bottom, and restrained tropical leaves around the side edges. Large uninterrupted transparent center for headings, forms and cards. Very low contrast, no text, logos, people, vehicles, UI, bright colors or watermark.
