@@ -13,7 +13,7 @@ export const contact = {
 };
 
 export const navItems = [
-  ['Properties','/properties'],['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Areas','/areas'],['NY/NJ → Miami','/ny-nj-to-miami'],['Market Today','/market-today'],['About Ruhan','/about'],['Contact','/contact'],
+  ['Properties','/properties'],['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Areas','/areas'],['NY/NJ → Miami','/ny-nj-to-miami'],['Market Today','/market-today'],['About Ruhan','/about'],
 ];
 
 const resolveAreaImage=(name)=>{
