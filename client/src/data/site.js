@@ -5,11 +5,19 @@ import groveImage from '../assets/coconut-grove-editorial.webp';
 import interiorImage from '../assets/luxury-interior-editorial.webp';
 
 export const contact = {
-  phone: import.meta.env.VITE_RUHAN_PHONE || '',
-  email: import.meta.env.VITE_RUHAN_EMAIL || '',
-  whatsapp: import.meta.env.VITE_WHATSAPP_NUMBER || '',
-  office: import.meta.env.VITE_BHS_OFFICE_ADDRESS || 'Miami Beach Continuum · Office details pending approval',
-  bhsProfile: import.meta.env.VITE_BHS_PROFILE_URL || '',
+  phone: import.meta.env.VITE_RUHAN_PHONE || '+14078402959',
+  phoneLabel: '407-840-2959',
+  email: import.meta.env.VITE_RUHAN_EMAIL || 'rsyed@bhsusa.com',
+  whatsapp: import.meta.env.VITE_WHATSAPP_NUMBER || '+14078402959',
+  officePhone: import.meta.env.VITE_BHS_OFFICE_PHONE || '+13056951111',
+  officePhoneLabel: '305-695-1111',
+  office: import.meta.env.VITE_BHS_OFFICE_ADDRESS || 'Miami Beach Continuum · 40 South Pointe Drive, Suite 110, Miami Beach, FL 33139',
+  bhsProfile: import.meta.env.VITE_BHS_PROFILE_URL || 'https://bhsmiami.com/bhs_miami_profiles.asp?PPD=3647548&RNAME=Ruhan+Syed',
+  social: {
+    instagram: import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/ruhan_realty/',
+    facebook: import.meta.env.VITE_FACEBOOK_URL || '',
+    linkedin: import.meta.env.VITE_LINKEDIN_URL || 'https://www.linkedin.com/in/ruhan-syed-49068b176',
+  },
 };
 
 export const navItems = [

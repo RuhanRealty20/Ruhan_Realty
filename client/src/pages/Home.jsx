@@ -7,10 +7,10 @@ import { Assistant } from '../components/Assistant';
 import { MarketSnapshot } from '../components/MarketSnapshot';
 import { SEO } from '../components/SEO';
 import { CTAButton, SectionHeading } from '../components/ui';
-import { areas, editorialImages, intents, leadMagnets } from '../data/site';
+import { areas, contact, editorialImages, intents, leadMagnets } from '../data/site';
 
 const schema={ '@context':'https://schema.org','@graph':[
-  {'@type':'Person',name:'Ruhan Syed',jobTitle:'Realtor Associate',worksFor:{'@type':'Organization',name:'Brown Harris Stevens'},knowsLanguage:['English','Hindi','Urdu'],url:'https://ruhanrealty.com'},
+  {'@type':'Person',name:'Ruhan Syed',jobTitle:'Realtor Associate',worksFor:{'@type':'Organization',name:'Brown Harris Stevens'},knowsLanguage:['English','Hindi','Urdu'],url:'https://ruhanrealty.com',telephone:contact.phone,email:contact.email,sameAs:[contact.social.instagram,contact.social.facebook,contact.social.linkedin,contact.bhsProfile].filter(Boolean)},
   {'@type':'WebSite',name:'Ruhan-Realty',alternateName:'Ruhan Syed Miami Real Estate',url:'https://ruhanrealty.com'},
 ]};
 
