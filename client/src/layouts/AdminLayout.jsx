@@ -2,4 +2,8 @@ import { BarChart3, FilePenLine, LogOut, Settings, Users } from 'lucide-react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 
-export function AdminLayout(){const navigate=useNavigate();const logout=async()=>{try{await api.auth.logout()}catch{ /* invalidate locally regardless */ }sessionStorage.removeItem('rr_access_token');navigate('/admin/login')};return <div className="admin-shell"><aside className="admin-sidebar"><div className="brand"><strong>RUHAN SYED</strong><span>Lead command center</span></div><nav className="admin-nav"><NavLink end to="/admin"><BarChart3/> Overview</NavLink><NavLink to="/admin/leads"><Users/> Leads</NavLink><NavLink to="/admin/content"><FilePenLine/> Content</NavLink><NavLink to="/admin/settings"><Settings/> Settings</NavLink></nav><button className="btn btn-outline" onClick={logout} style={{marginTop:'2rem',color:'white'}}><LogOut size={16}/> Logout</button></aside><main className="admin-main"><Outlet/></main></div>}
+export function AdminLayout(){
+  const navigate=useNavigate();
+  const logout=async()=>{try{await api.auth.logout()}catch{ /* invalidate locally regardless */ }sessionStorage.removeItem('rr_access_token');navigate('/admin/login')};
+  return <div className="admin-shell"><aside className="admin-sidebar"><div className="brand"><strong>RUHAN-REALTY</strong><span>Lead command center</span></div><nav className="admin-nav"><NavLink end to="/admin"><BarChart3/> Overview</NavLink><NavLink to="/admin/leads"><Users/> Leads</NavLink><NavLink to="/admin/content"><FilePenLine/> Content</NavLink><NavLink to="/admin/settings"><Settings/> Settings</NavLink></nav><button className="btn btn-outline" onClick={logout} style={{marginTop:'2rem',color:'white'}}><LogOut size={16}/> Logout</button></aside><main className="admin-main"><Outlet/></main></div>;
+}

@@ -7,3 +7,14 @@ Final prompt:
 > Photorealistic-natural, full-bleed luxury real-estate website hero. Original editorial photograph of contemporary Miami waterfront residential architecture at dawn across calm Biscayne Bay. Architecture, water and open sky; no people. Ultra-wide composition with architecture on the right and negative space on the left. Warm early sunrise reflections, deep navy shadows, warm white limestone, restrained gold and pale ocean blue. No logos, signs, text, watermark, recognizable trademarked building or flashy/HDR resort-ad treatment.
 
 Replace or re-approve all marketing imagery during broker/compliance review. Listing photography must come only through the approved IDX provider.
+
+## Expanded editorial set
+
+The built-in image-generation tool also created four coordinated, non-MLS editorial assets:
+
+- `brickell-waterfront-editorial.*` — Brickell-inspired waterfront architecture at blue hour, navy and restrained gold, no logos or identifiable address.
+- `miami-beach-editorial.*` — contemporary Miami Beach oceanfront architecture, palms, sand and Atlantic horizon, no branded building.
+- `coconut-grove-editorial.*` — limestone-and-wood residential architecture under a mature tropical canopy, no identifiable address.
+- `luxury-interior-editorial.*` — understated waterfront interior with limestone, light oak, neutral furniture and golden-hour bay views.
+
+All prompts requested photorealistic-natural editorial photography with no people, text, watermarks, logos, listing claims or trademarked buildings. Source PNG files and optimized AVIF/WebP derivatives are stored in `client/src/assets/`.

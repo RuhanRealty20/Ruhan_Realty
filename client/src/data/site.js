@@ -1,4 +1,8 @@
 import { Building2, ChartNoAxesCombined, CircleHelp, HardHat, House, KeyRound, MapPinned, MoveRight, Search, Signpost, Waves } from 'lucide-react';
+import brickellImage from '../assets/brickell-waterfront-editorial.webp';
+import beachImage from '../assets/miami-beach-editorial.webp';
+import groveImage from '../assets/coconut-grove-editorial.webp';
+import interiorImage from '../assets/luxury-interior-editorial.webp';
 
 export const contact = {
   phone: import.meta.env.VITE_RUHAN_PHONE || '',
@@ -12,6 +16,13 @@ export const navItems = [
   ['Properties','/properties'],['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Areas','/areas'],['NY/NJ → Miami','/ny-nj-to-miami'],['Market Today','/market-today'],['About Ruhan','/about'],['Contact','/contact'],
 ];
 
+const resolveAreaImage=(name)=>{
+  if(['Brickell','Downtown Miami','Edgewater','Aventura','North Miami Beach','Fort Lauderdale'].includes(name))return brickellImage;
+  if(['Miami Beach','South Beach','Key Biscayne','Fisher Island','Sunny Isles','Bal Harbour'].includes(name))return beachImage;
+  if(['Coconut Grove','Coral Gables'].includes(name))return groveImage;
+  return interiorImage;
+};
+
 export const intents = [
   { label:'Buy a home', path:'/buy', icon:House }, { label:'Sell my property', path:'/sell', icon:Signpost },
   { label:'Rent a property', path:'/rent', icon:KeyRound }, { label:'List my rental', path:'/landlord', icon:Building2 },
@@ -21,7 +32,9 @@ export const intents = [
 
 export const areas = [
   'Brickell','Downtown Miami','Miami Beach','South Beach','Edgewater','Coconut Grove','Coral Gables','Key Biscayne','Fisher Island','Sunny Isles','Bal Harbour','Aventura','North Miami Beach','Fort Lauderdale',
-].map((name, i) => ({ name, slug:name.toLowerCase().replaceAll(' ','-'), icon:i % 2 ? MapPinned : Waves, summary:`An objective introduction to ${name}, its housing mix, access, amenities and available IDX inventory.` }));
+].map((name, i) => ({ name, slug:name.toLowerCase().replaceAll(' ','-'), icon:i % 2 ? MapPinned : Waves, image:resolveAreaImage(name), summary:`An objective introduction to ${name}, its housing mix, access, amenities and available IDX inventory.` }));
+
+export const editorialImages={brickell:brickellImage,beach:beachImage,grove:groveImage,interior:interiorImage};
 
 export const conversionContent = {
   buy:{ eyebrow:'Find your place', title:'Buy in Miami with clarity.', intro:'Tell Ruhan what matters to you. You’ll receive a focused, responsive search plan—not a stream of irrelevant listings.', formTitle:'Build my buyer brief' },
