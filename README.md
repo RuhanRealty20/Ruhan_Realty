@@ -84,10 +84,10 @@ The chat UI works in guided fallback mode until Gemini is configured. To enable 
 ```env
 AI_PROVIDER=gemini
 GEMINI_API_KEY=your_key_from_google_ai_studio
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.8-flash
 ```
 
-Never add the key to `client/.env`, a `VITE_*` variable, source control, browser analytics or logs. The assistant uses an approved local knowledge layer in `server/src/data/assistantKnowledge.js`; it is not fine-tuned on visitor conversations and does not store chats in MongoDB. Property cards are produced only from `server/src/integrations/idx/index.js`. With IDX unconfigured, the assistant explicitly declines to invent listings and routes the visitor to Ruhan.
+Never add the key to `client/.env`, a `VITE_*` variable, source control, browser analytics or logs. The assistant uses an approved local knowledge layer in `server/src/data/assistantKnowledge.js` plus public CMS entries whose status is `PUBLISHED`; it is not fine-tuned on visitor conversations and does not store chats in MongoDB. Property cards are produced only from `server/src/integrations/idx/index.js`. With IDX unconfigured, the assistant explicitly declines to invent listings and routes the visitor to Ruhan.
 
 ## Commands
 

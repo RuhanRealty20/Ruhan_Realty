@@ -1,4 +1,4 @@
-import { env } from '../../config/env.js';
+import { env, geminiApiBase, geminiApiKey } from '../../config/env.js';
 import { logger } from '../../config/logger.js';
 import { ApiError } from '../../utils/api.js';
 
@@ -8,15 +8,16 @@ const responseSchema={
     reply:{type:'STRING'},intent:{type:'STRING',enum:['buy','sell','rent','landlord','invest','relocate','new-construction','general']},
     area:{type:'STRING'},propertyType:{type:'STRING'},minPrice:{type:'NUMBER'},maxPrice:{type:'NUMBER'},beds:{type:'NUMBER'},baths:{type:'NUMBER'},timeframe:{type:'STRING'},goal:{type:'STRING'},
     shouldSearch:{type:'BOOLEAN'},quickReplies:{type:'ARRAY',items:{type:'STRING'}},suggestedPath:{type:'STRING'},
+    recommendations:{type:'ARRAY',items:{type:'OBJECT',required:['label','path','reason'],properties:{label:{type:'STRING'},path:{type:'STRING'},reason:{type:'STRING'}}}},
   },
 };
 
 const wait=(ms)=>new Promise(resolve=>setTimeout(resolve,ms));
 
 export async function generateGeminiResponse({systemInstruction,history,message,profile}){
-  const apiKey=env.GEMINI_API_KEY||env.AI_API_KEY;
+  const apiKey=geminiApiKey;
   if(!apiKey)throw new ApiError(503,'The AI assistant is not configured yet','AI_NOT_CONFIGURED');
-  const url=`${env.GEMINI_API_BASE}/models/${encodeURIComponent(env.GEMINI_MODEL)}:generateContent`;
+  const url=`${geminiApiBase}/models/${encodeURIComponent(env.GEMINI_MODEL)}:generateContent`;
   const contents=[
     ...history.map(turn=>({role:turn.role==='assistant'?'model':'user',parts:[{text:turn.text}]})),
     {role:'user',parts:[{text:`Current visitor profile: ${JSON.stringify(profile)}\nCurrent page: ${message.page}\nVisitor message: ${message.text}`}]} ,
