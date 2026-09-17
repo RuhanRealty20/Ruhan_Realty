@@ -11,6 +11,7 @@ export const api = {
   leads:{ create:(data) => request('/leads',{ method:'POST', body:JSON.stringify(data) }), list:(params='') => request(`/leads?${params}`), update:(id,data) => request(`/leads/${id}`,{ method:'PATCH',body:JSON.stringify(data) }), note:(id,note) => request(`/leads/${id}/notes`,{method:'POST',body:JSON.stringify({note})}) },
   auth:{ login:(data) => request('/auth/login',{method:'POST',body:JSON.stringify(data)}), refresh:() => request('/auth/refresh',{method:'POST'}), logout:() => request('/auth/logout',{method:'POST'}) },
   properties:{ list:(params='') => request(`/properties?${params}`), one:(slug) => request(`/properties/${slug}`) },
+  assistant:{ chat:(data) => request('/assistant/chat',{method:'POST',body:JSON.stringify(data)}) },
   dashboard:() => request('/admin/dashboard'),
   content:{ list:(type) => request(`/content/${type}`) },
 };

@@ -10,10 +10,19 @@ const goals={buy:['Primary home','Second home','Investment','Not sure yet'],sell
 const propertyTypes=['Condo','Single-family home','Townhome','Multi-family','Land','Other / undecided'];
 const contactOptions=[{value:'PHONE',label:'Phone call'},{value:'EMAIL',label:'Email'},{value:'WHATSAPP',label:'WhatsApp'},{value:'TEXT',label:'Text message'}];
 
+function assistantPrefill(defaultIntent){
+  try{
+    const handoff=JSON.parse(sessionStorage.getItem('rr_assistant_handoff'));if(!handoff?.profile)return{};
+    const profile=handoff.profile;const mappedIntent=(profile.intent==='general'?'contact':profile.intent||defaultIntent).toUpperCase().replace('-','_');
+    const budget=profile.minPrice||profile.maxPrice?[profile.minPrice?`$${Number(profile.minPrice).toLocaleString()}`:'',profile.maxPrice?`${profile.minPrice?'– ':'Up to '}$${Number(profile.maxPrice).toLocaleString()}`:''].filter(Boolean).join(''):'';
+    return{intent:mappedIntent,budget,location:profile.area||'',propertyType:profile.propertyType||'',beds:profile.beds||'',baths:profile.baths||'',moveDate:profile.timeframe||'',notes:profile.goal?`Assistant context: ${profile.goal}`:''};
+  }catch{return{}}
+}
+
 function Input({label,name,value,onChange,error,type='text',required=false,options,placeholder}){return <div className="field"><label htmlFor={name}>{label}{required?' *':''}</label>{options?<select id={name} name={name} value={value||''} onChange={onChange} aria-invalid={!!error}><option value="">Select one</option>{options.map(option=>{const item=typeof option==='string'?{value:option,label:option}:option;return <option value={item.value} key={item.value}>{item.label}</option>})}</select>:<input id={name} name={name} type={type} value={value||''} onChange={onChange} placeholder={placeholder} aria-invalid={!!error}/>} {error&&<span className="field-error">{error}</span>}</div>}
 
 export function LeadForm({intent='contact',title='Talk to Ruhan',property}){
-  const {attribution}=useAttribution();const {notify}=useToast();const [step,setStep]=useState(0);const [submitting,setSubmitting]=useState('');const [done,setDone]=useState(false);const [sentChannel,setSentChannel]=useState('');const [errors,setErrors]=useState({});const [data,setData]=useState({intent:intent.toUpperCase().replace('-','_'),preferredContact:'PHONE',consent:false,website:''});
+  const {attribution}=useAttribution();const {notify}=useToast();const [step,setStep]=useState(0);const [submitting,setSubmitting]=useState('');const [done,setDone]=useState(false);const [sentChannel,setSentChannel]=useState('');const [errors,setErrors]=useState({});const [data,setData]=useState(()=>({intent:intent.toUpperCase().replace('-','_'),preferredContact:'PHONE',consent:false,website:'',...assistantPrefill(intent)}));
   const choices=useMemo(()=>goals[intent]||goals.contact,[intent]);
   const change=e=>{const {name,value,type,checked}=e.target;setData(current=>({...current,[name]:type==='checkbox'?checked:value}));setErrors(current=>({...current,[name]:undefined}))};
   const choose=value=>{setData(current=>({...current,goal:value}));setErrors({})};

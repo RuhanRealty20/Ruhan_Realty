@@ -9,6 +9,7 @@ const Home = lazy(() => import('./pages/Home'));
 const Properties = lazy(() => import('./pages/Properties'));
 const PropertyDetail = lazy(() => import('./pages/PropertyDetail'));
 const ConversionPage = lazy(() => import('./pages/ConversionPage'));
+const Contact = lazy(() => import('./pages/Contact'));
 const Areas = lazy(() => import('./pages/Areas'));
 const AreaDetail = lazy(() => import('./pages/AreaDetail'));
 const Market = lazy(() => import('./pages/Market'));
@@ -43,7 +44,8 @@ export function App() {
           <Route index element={<Home />} />
           <Route path="properties" element={<Properties />} />
           <Route path="properties/:slug" element={<PropertyDetail />} />
-          {['buy','sell','rent','landlord','invest','relocate','new-construction','contact'].map((path) => <Route key={path} path={path} element={<ConversionPage type={path} />} />)}
+          {['buy','sell','rent','landlord','invest','relocate','new-construction'].map((path) => <Route key={path} path={path} element={<ConversionPage type={path} />} />)}
+          <Route path="contact" element={<Contact />} />
           <Route path="ny-nj-to-miami" element={<ConversionPage type="relocate" relocationLanding />} />
           <Route path="areas" element={<Areas />} />
           <Route path="areas/:slug" element={<AreaDetail />} />

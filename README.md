@@ -14,7 +14,7 @@ Production-oriented Miami real-estate lead-generation platform for **Ruhan Syed,
 - Lead CRM with lifecycle statuses, filters, notes/activity data model, quick contact actions and dashboard metrics
 - CMS schemas for areas, articles, testimonials, FAQs, lead magnets and editable site content
 - Market metric model requiring source, geography, reporting period, last update and last successful update
-- Email adapter and extension seams for SMS, WhatsApp, analytics and optional provider-neutral AI assistance
+- Email adapter and extension seams for SMS, WhatsApp and analytics, plus a Gemini-powered website and property-search assistant with a non-AI fallback
 - Dynamic page metadata, canonical tags, JSON-LD, robots.txt, sitemap generation and noindex controls
 - Original development hero artwork with AVIF/WebP output. It is marketing imagery, never MLS inventory.
 
@@ -77,6 +77,18 @@ The example files are authoritative and contain no secrets.
 - Server: MongoDB URI, allowed origins, separate JWT secrets/TTLs, SMTP settings, notification destinations, IDX provider configuration, optional messaging/analytics/AI provider selectors, proxy and log settings.
 - Never expose IDX, email, messaging, database or AI credentials through `VITE_*` variables.
 
+### Gemini assistant setup
+
+The chat UI works in guided fallback mode until Gemini is configured. To enable grounded natural-language answers, set these server-only values in `server/.env` and restart the API:
+
+```env
+AI_PROVIDER=gemini
+GEMINI_API_KEY=your_key_from_google_ai_studio
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+Never add the key to `client/.env`, a `VITE_*` variable, source control, browser analytics or logs. The assistant uses an approved local knowledge layer in `server/src/data/assistantKnowledge.js`; it is not fine-tuned on visitor conversations and does not store chats in MongoDB. Property cards are produced only from `server/src/integrations/idx/index.js`. With IDX unconfigured, the assistant explicitly declines to invent listings and routes the visitor to Ruhan.
+
 ## Commands
 
 ```bash
@@ -99,6 +111,7 @@ All endpoints use `/api/v1` and `{ success, data }` or `{ success:false, error:{
 - `POST /leads` (public, validated and rate-limited)
 - `GET/PATCH /leads`, `POST /leads/:id/notes` (protected)
 - `GET /properties`, `GET /properties/:slug`
+- `POST /assistant/chat` (public, validated and rate-limited; Gemini server-side with safe fallback)
 - `GET /content/public/:type`; protected CMS list/create/update endpoints
 - `GET /admin/dashboard` (protected)
 

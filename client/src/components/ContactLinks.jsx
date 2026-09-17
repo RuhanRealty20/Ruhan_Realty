@@ -15,6 +15,17 @@ export function SocialLinks({labels=false,className=''}){
   </div>;
 }
 
+export function SocialDirectory({showPending=false,className=''}){
+  return <div className={`social-directory ${className}`.trim()}>
+    {socialProfiles.map(({key,label,handle,mark})=>{
+      const href=contact.social[key];
+      if(!href&&!showPending)return null;
+      const content=<><b className="social-directory-mark" aria-hidden="true">{mark}</b><span><small>Follow on</small><strong>{label}</strong><em>{handle}</em></span><span className="social-directory-arrow" aria-hidden="true">↗</span></>;
+      return href?<a key={key} href={href} target="_blank" rel="noreferrer" onClick={()=>track('social_click',{platform:key})}>{content}</a>:<div key={key} className="social-profile-pending" aria-label={`${label} profile link pending approval`}>{content}<span className="pending-label">Link pending</span></div>;
+    })}
+  </div>;
+}
+
 export function ContactLinks({className=''}){
   return <div className={`contact-links ${className}`.trim()}>
     <a href={`tel:${contact.phone}`} onClick={()=>track('call_click')}><Phone size={17}/><span><small>Call or text</small>{contact.phoneLabel}</span></a>
