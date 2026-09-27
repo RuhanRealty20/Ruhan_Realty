@@ -19,10 +19,15 @@ function assistantPrefill(defaultIntent){
   }catch{return{}}
 }
 
+function relocationPrefill(defaultIntent){
+  if(defaultIntent!=='relocate')return{};
+  try{const value=JSON.parse(sessionStorage.getItem('rr_relocation_handoff'));if(!value)return{};return{goal:value.plan||'',budget:value.budget||'',location:value.origin?`Moving from ${value.origin}`:'',moveDate:value.timeframe||'',phone:value.phone||'',email:value.email||'',notes:value.origin?`Relocation origin: ${value.origin}`:''}}catch{return{}}
+}
+
 function Input({label,name,value,onChange,error,type='text',required=false,options,placeholder}){return <div className="field"><label htmlFor={name}>{label}{required?' *':''}</label>{options?<select id={name} name={name} value={value||''} onChange={onChange} aria-invalid={!!error}><option value="">Select one</option>{options.map(option=>{const item=typeof option==='string'?{value:option,label:option}:option;return <option value={item.value} key={item.value}>{item.label}</option>})}</select>:<input id={name} name={name} type={type} value={value||''} onChange={onChange} placeholder={placeholder} aria-invalid={!!error}/>} {error&&<span className="field-error">{error}</span>}</div>}
 
 export function LeadForm({intent='contact',title='Talk to Ruhan',property}){
-  const {attribution}=useAttribution();const {notify}=useToast();const [step,setStep]=useState(0);const [submitting,setSubmitting]=useState('');const [done,setDone]=useState(false);const [sentChannel,setSentChannel]=useState('');const [errors,setErrors]=useState({});const [data,setData]=useState(()=>({intent:intent.toUpperCase().replace('-','_'),preferredContact:'PHONE',consent:false,website:'',...assistantPrefill(intent)}));
+  const {attribution}=useAttribution();const {notify}=useToast();const [step,setStep]=useState(0);const [submitting,setSubmitting]=useState('');const [done,setDone]=useState(false);const [sentChannel,setSentChannel]=useState('');const [errors,setErrors]=useState({});const [data,setData]=useState(()=>({intent:intent.toUpperCase().replace('-','_'),preferredContact:'PHONE',consent:false,website:'',...assistantPrefill(intent),...relocationPrefill(intent)}));
   const choices=useMemo(()=>goals[intent]||goals.contact,[intent]);
   const change=e=>{const {name,value,type,checked}=e.target;setData(current=>({...current,[name]:type==='checkbox'?checked:value}));setErrors(current=>({...current,[name]:undefined}))};
   const choose=value=>{setData(current=>({...current,goal:value}));setErrors({})};

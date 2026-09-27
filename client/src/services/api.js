@@ -13,5 +13,5 @@ export const api = {
   properties:{ list:(params='') => request(`/properties?${params}`), one:(slug) => request(`/properties/${slug}`) },
   assistant:{ chat:(data) => request('/assistant/chat',{method:'POST',body:JSON.stringify(data)}) },
   dashboard:() => request('/admin/dashboard'),
-  content:{ list:(type) => request(`/content/${type}`) },
+  content:{ list:(type) => request(`/content/${type}`), publicList:(type) => request(`/content/public/${type}`) },
 };

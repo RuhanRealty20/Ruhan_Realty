@@ -1,13 +1,14 @@
 import { ArrowUpRight, Bot, Building2, ChartNoAxesCombined, ChevronRight, House, KeyRound, LoaderCircle, MapPinned, MessageSquareText, RefreshCw, Send, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { contact } from '../data/site';
 import { api } from '../services/api';
 import { track } from '../services/analytics';
 
 const storageKey='rr_assistant_session_v1';
-const welcome={role:'assistant',text:'Welcome to Ruhan-Realty. I can answer questions about the website, help clarify your Miami real-estate needs, and search authorized listings when the approved property feed is connected. What would you like to do?'};
-const firstReplies=['Buy a home','Rent a property','Sell my property','Relocate to Miami'];
-const starters=[{label:'Find a home',prompt:'I want to buy a home in Miami',icon:House},{label:'Find a rental',prompt:'I need to rent a property in Miami',icon:KeyRound},{label:'Compare areas',prompt:'Help me compare Miami areas',icon:MapPinned},{label:'Plan an investment',prompt:'I want to discuss a Miami real-estate investment',icon:ChartNoAxesCombined}];
+const welcome={role:'assistant',text:'Hi, I’m Ruhan’s website assistant. What are you looking to do in Miami or South Florida? I can help you clarify the next step and search authorized listings when the approved property feed is connected.'};
+const firstReplies=['Buy','Rent','Sell / List','Relocate','Invest','Ask a question'];
+const starters=[{label:'Buy',prompt:'I want to buy a home in Miami',icon:House},{label:'Rent',prompt:'I need to rent a property in Miami',icon:KeyRound},{label:'Sell / List',prompt:'I want to sell or list a property',icon:Building2},{label:'Relocate',prompt:'I am planning a move to Miami',icon:MapPinned},{label:'Invest',prompt:'I want to discuss a Miami real-estate investment',icon:ChartNoAxesCombined},{label:'Ask a question',prompt:'I have a question about Ruhan’s services',icon:MessageSquareText}];
 
 function restore(){
   try{const value=JSON.parse(sessionStorage.getItem(storageKey));return value&&Array.isArray(value.messages)?value:null}catch{return null}
@@ -56,7 +57,9 @@ export function Assistant(){
 
   const handleQuickReply=(reply)=>{
     if(reply==='Talk to Ruhan'||reply==='Open contact page'){saveHandoff();track('assistant_handoff',{destination:'/contact'});close();navigate('/contact');return}
-    if(reply==='WhatsApp Ruhan'){window.open('https://wa.me/14078402959','_blank','noopener,noreferrer');track('assistant_handoff',{channel:'whatsapp'});return}
+    if(reply==='WhatsApp Ruhan'){window.open(`https://wa.me/${contact.whatsapp.replace(/\D/g,'')}`,'_blank','noopener,noreferrer');track('assistant_handoff',{channel:'whatsapp'});return}
+    if(reply==='Call Ruhan'){window.open(`tel:${contact.phone}`,'_self');track('assistant_handoff',{channel:'call'});return}
+    if(reply==='Text Ruhan'){window.open(`sms:${contact.phone}`,'_self');track('assistant_handoff',{channel:'text'});return}
     if(reply==='Try again'){setError('');return}
     send(reply);
   };

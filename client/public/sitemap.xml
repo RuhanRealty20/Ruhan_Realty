@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://ruhanrealty.com/</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://ruhanrealty.com/properties</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://ruhanrealty.com/buy</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://ruhanrealty.com/sell</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://ruhanrealty.com/rent</loc><changefreq>monthly</changefreq></url>
@@ -15,9 +14,6 @@
   <url><loc>https://ruhanrealty.com/market-today</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://ruhanrealty.com/about</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://ruhanrealty.com/insights</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://ruhanrealty.com/privacy</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://ruhanrealty.com/terms</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://ruhanrealty.com/cookies</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://ruhanrealty.com/areas/brickell</loc><changefreq>weekly</changefreq></url>
   <url><loc>https://ruhanrealty.com/areas/downtown-miami</loc><changefreq>weekly</changefreq></url>
   <url><loc>https://ruhanrealty.com/areas/miami-beach</loc><changefreq>weekly</changefreq></url>
