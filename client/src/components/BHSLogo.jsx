@@ -1,6 +1,12 @@
 export function BHSLogo({className='',compact=false}){
-  return <span className={`bhs-logo ${compact?'bhs-logo-compact':''} ${className}`.trim()} role="img" aria-label="Brown Harris Stevens">
-    <span className="bhs-monogram" aria-hidden="true"><b>B</b><b>H</b><b>S</b></span>
-    {!compact&&<span className="bhs-wordmark" aria-hidden="true"><b>BROWN</b><b>HARRIS</b><b>STEVENS</b></span>}
-  </span>;
+  const width=compact?36:174;
+  return <svg className={`bhs-logo ${compact?'bhs-logo-compact':''} ${className}`.trim()} viewBox={`0 0 ${width} 66`} role="img" aria-label="Brown Harris Stevens" focusable="false">
+    <g fill="currentColor" fontFamily="Arial, Helvetica, sans-serif" fontWeight="900">
+      <text x="0" y="19" fontSize="20">B</text>
+      <text x="0" y="40" fontSize="20">H</text>
+      <text x="0" y="61" fontSize="20">S</text>
+      <rect x="29" y="1" width="2" height="64"/>
+      {!compact&&<><text x="43" y="18" fontSize="13" letterSpacing="1">BROWN</text><text x="43" y="39" fontSize="13" letterSpacing="1">HARRIS</text><text x="43" y="60" fontSize="13" letterSpacing="1">STEVENS</text></>}
+    </g>
+  </svg>;
 }

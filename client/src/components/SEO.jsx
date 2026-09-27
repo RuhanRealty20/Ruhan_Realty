@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 const siteUrl=(import.meta.env.VITE_SITE_URL||'https://ruhanrealty.com').replace(/\/$/,'');
-const siteName='Ruhan Syed | Miami Real Estate';
+const siteName='Ruhan-Realty | Ruhan Syed · Miami Real Estate';
 
 function setMeta(name,content,property=false){
   if(content===undefined||content===null||content==='')return;
@@ -18,7 +18,7 @@ function setLink(rel,href,hreflang){
 
 export function SEO({title,description,image='/og-default.jpg',imageAlt,titleTemplate=true,type='website',noindex=false,schema,publishedTime,modifiedTime}){
   useEffect(()=>{
-    const pageTitle=titleTemplate?`${title} | Ruhan Syed · Brown Harris Stevens`:title;
+    const pageTitle=titleTemplate?`${title} | Ruhan-Realty · Brown Harris Stevens`:title;
     const canonicalPath=window.location.pathname==='/'?'/':window.location.pathname.replace(/\/$/,'');
     const url=`${siteUrl}${canonicalPath}`; const absoluteImage=image.startsWith('http')?image:`${siteUrl}${image.startsWith('/')?'':'/'}${image}`;
     document.title=pageTitle; document.documentElement.lang='en';
