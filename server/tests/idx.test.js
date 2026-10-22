@@ -31,4 +31,11 @@ describe('Bridge IDX adapter',()=>{
     expect(result.pagination).toEqual({page:2,limit:12,total:25,pages:3});
     expect(result.dataMode).toBe('test');
   });
+
+  it('returns expanded facts and gallery data for a property detail page',()=>{
+    const property=normalizeBridgeProperty({...sample,LivingArea:1420,YearBuilt:2019,InteriorFeatures:['Walk-In Closet'],AssociationAmenities:['Pool']},{details:true});
+    expect(property.gallery).toHaveLength(1);
+    expect(property.facts).toEqual(expect.arrayContaining([{label:'Interior',value:'1,420 sq ft'},{label:'Year built',value:'2019'}]));
+    expect(property.featureSections.flatMap(section=>section.items)).toContain('Walk-In Closet');
+  });
 });

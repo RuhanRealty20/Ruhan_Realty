@@ -15,7 +15,7 @@ export const contact = {
   social: { instagram: import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/ruhan_realty/', facebook: import.meta.env.VITE_FACEBOOK_URL || '', linkedin: import.meta.env.VITE_LINKEDIN_URL || 'https://www.linkedin.com/in/ruhan-syed-49068b176' },
 };
 
-export const navItems = [['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Areas','/areas'],['Market','/market-today'],['About','/about'],['Contact','/contact']];
+export const navItems = [['Properties','/properties'],['Buy','/buy'],['Sell','/sell'],['Rent','/rent'],['Areas','/areas'],['Market','/market-today'],['About','/about']];
 
 const resolveAreaImage=(name)=>{
   if(['Brickell','Downtown Miami','Edgewater','Aventura','North Miami Beach','Fort Lauderdale'].includes(name))return brickellImage;

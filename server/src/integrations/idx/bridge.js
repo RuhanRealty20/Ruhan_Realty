@@ -36,6 +36,25 @@ export function listingKeyFromSlug(slug) {
 
 const textValue = (value) => Array.isArray(value) ? value.join(', ') : value;
 
+const listValue = (value) => {
+  if (Array.isArray(value)) return value.map(String).map((item) => item.trim()).filter(Boolean);
+  if (typeof value === 'string') return value.split(',').map((item) => item.trim()).filter(Boolean);
+  return value === undefined || value === null || value === '' ? [] : [String(value)];
+};
+
+const unique = (items) => [...new Set(items.filter(Boolean))];
+
+const displayNumber = (value) => {
+  const number = safeNumber(value);
+  return number === undefined ? '' : new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(number);
+};
+
+const displayDate = (value) => {
+  if (!value) return '';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? '' : date.toISOString();
+};
+
 const isRental = (property) => {
   const searchable = [property.PropertyType, property.PropertySubType, property.ListingAgreement]
     .flatMap((value) => Array.isArray(value) ? value : [value])
@@ -67,22 +86,48 @@ const propertyLocation = (property) => [
   property.PostalCode,
 ].filter(Boolean).join(' · ');
 
-const primaryPhoto = (property) => [...(Array.isArray(property.Media) ? property.Media : [])]
+const listingPhotos = (property) => [...(Array.isArray(property.Media) ? property.Media : [])]
   .filter((media) => media?.MediaURL && (!media.MediaCategory || /photo|image/i.test(media.MediaCategory)))
-  .sort((left, right) => (safeNumber(left.Order) ?? 999) - (safeNumber(right.Order) ?? 999))[0];
+  .sort((left, right) => (safeNumber(left.Order) ?? 999) - (safeNumber(right.Order) ?? 999))
+  .map((media,index)=>({url:media.MediaURL,alt:media.ShortDescription||`Authorized listing photo ${index+1}`}));
 
-export function normalizeBridgeProperty(property) {
+export function normalizeBridgeProperty(property,{details=false}={}) {
   if (!property || typeof property !== 'object') return null;
   const id = String(property.ListingKey || property.ListingId || property.PropertyUniversalID || '');
   if (!id) return null;
   const address = propertyAddress(property);
   const rental = isRental(property);
   const rawPrice = rental ? safeNumber(property.LeaseAmount) : safeNumber(property.ListPrice);
-  const photo = primaryPhoto(property);
+  const photos = listingPhotos(property);
+  const photo = photos[0];
   const office = property.ListOfficeName || property.OriginatingSystemName || property.SourceSystemName;
   const providerDisclaimer = textValue(property.CopyrightNotice || property.Disclaimer);
+  const squareFeet=safeNumber(property.LivingArea)||safeNumber(property.BuildingAreaTotal)||safeNumber(property.AboveGradeFinishedArea);
+  const lotSquareFeet=safeNumber(property.LotSizeSquareFeet);
+  const associationFee=safeNumber(property.AssociationFee);
+  const lotDisplay=lotSquareFeet?`${displayNumber(lotSquareFeet)} sq ft`:property.LotSizeArea?`${displayNumber(property.LotSizeArea)} ${property.LotSizeUnits||''}`.trim():'';
+  const facts=[
+    {label:'Bedrooms',value:displayNumber(property.BedroomsTotal)},
+    {label:'Bathrooms',value:displayNumber(property.BathroomsTotalInteger??property.BathroomsTotalDecimal)},
+    {label:'Interior',value:squareFeet?`${displayNumber(squareFeet)} sq ft`:''},
+    {label:'Property type',value:textValue(property.PropertySubType||property.PropertyType)},
+    {label:'Year built',value:property.YearBuilt?String(property.YearBuilt):''},
+    {label:'Parking',value:safeNumber(property.ParkingTotal)!==undefined?`${displayNumber(property.ParkingTotal)} spaces`:''},
+    {label:'Garage',value:safeNumber(property.GarageSpaces)!==undefined?`${displayNumber(property.GarageSpaces)} spaces`:''},
+    {label:'Lot size',value:lotDisplay},
+    {label:'Days on market',value:displayNumber(property.DaysOnMarket)},
+    {label:'Association fee',value:associationFee?`${money.format(associationFee)}${property.AssociationFeeFrequency?` / ${String(property.AssociationFeeFrequency).toLowerCase()}`:''}`:''},
+    {label:'MLS number',value:property.ListingId},
+    {label:'Status',value:property.MlsStatus||property.StandardStatus},
+  ].filter((fact)=>fact.value!==''&&fact.value!==undefined&&fact.value!==null);
+  const featureSections=[
+    {title:'Interior',items:unique([...listValue(property.InteriorFeatures),...listValue(property.Appliances),...listValue(property.Flooring),...listValue(property.LaundryFeatures)])},
+    {title:'Building & exterior',items:unique([...listValue(property.ArchitecturalStyle),...listValue(property.ConstructionMaterials),...listValue(property.ExteriorFeatures),...listValue(property.PatioAndPorchFeatures),...listValue(property.Roof)])},
+    {title:'Amenities',items:unique([...listValue(property.AssociationAmenities),...listValue(property.BuildingFeatures),...listValue(property.CommunityFeatures),...listValue(property.PoolFeatures)])},
+    {title:'Setting & views',items:unique([...listValue(property.View),...listValue(property.WaterfrontFeatures),...listValue(property.LotFeatures)])},
+  ].filter((section)=>section.items.length);
 
-  return {
+  const normalized={
     id,
     slug: `${slugify(address)}--${encodeListingKey(id)}`,
     title: address,
@@ -92,16 +137,45 @@ export function normalizeBridgeProperty(property) {
     rawPrice,
     beds: safeNumber(property.BedroomsTotal) ?? 0,
     baths: safeNumber(property.BathroomsTotalInteger) ?? safeNumber(property.BathroomsTotalDecimal) ?? 0,
-    livingArea: safeNumber(property.LivingArea),
+    livingArea: squareFeet,
     type: textValue(property.PropertySubType || property.PropertyType) || 'Property',
     status: listingStatus(property),
-    image: photo?.MediaURL || '',
-    imageAlt: photo?.ShortDescription || `Authorized listing photo for ${address}`,
+    image: photo?.url || '',
+    imageAlt: photo?.alt || `Authorized listing photo for ${address}`,
     description: property.PublicRemarks || 'Contact the real-estate advisor for authorized listing details.',
     attribution: providerDisclaimer || `Listing courtesy of ${office || 'the listing broker'} via the approved Bridge IDX feed. Information is deemed reliable but is not guaranteed.`,
     indexable: property.IDXParticipationYN !== false && property.InternetEntireListingDisplayYN !== false,
     provider: 'bridge',
     sourceUpdatedAt: property.ModificationTimestamp || property.MajorChangeTimestamp,
+  };
+  if(!details)return normalized;
+  return{
+    ...normalized,
+    gallery:photos.slice(0,40).map((item,index)=>({...item,alt:item.alt||`Authorized listing photo ${index+1} for ${address}`})),
+    photoCount:safeNumber(property.PhotosCount)??photos.length,
+    facts,
+    featureSections,
+    listingId:property.ListingId||id,
+    standardStatus:property.StandardStatus,
+    mlsStatus:property.MlsStatus,
+    county:property.CountyOrParish,
+    subdivision:property.SubdivisionName,
+    buildingName:property.BuildingName,
+    latitude:safeNumber(property.Latitude),
+    longitude:safeNumber(property.Longitude),
+    yearBuilt:safeNumber(property.YearBuilt),
+    parkingFeatures:listValue(property.ParkingFeatures),
+    furnished:textValue(property.Furnished),
+    petsAllowed:textValue(property.PetsAllowed),
+    waterfront:Boolean(property.WaterfrontYN),
+    pool:Boolean(property.PoolPrivateYN)||listValue(property.PoolFeatures).length>0,
+    taxAnnualAmount:safeNumber(property.TaxAnnualAmount),
+    taxYear:safeNumber(property.TaxYear),
+    onMarketDate:displayDate(property.OnMarketDate),
+    updatedAt:displayDate(property.ModificationTimestamp||property.MajorChangeTimestamp),
+    listingAgent:property.ListAgentFullName,
+    listingOffice:office,
+    virtualTourUrl:property.VirtualTourURLUnbranded||'',
   };
 }
 
@@ -203,8 +277,8 @@ export class BridgeIdxAdapter {
       '$top': 1,
       '$filter': `ListingKey eq '${escapeOData(listingKey)}' and IDXParticipationYN eq true and InternetEntireListingDisplayYN eq true`,
     });
-    const property = normalizeBridgeProperty(body.value?.[0]);
+    const property = normalizeBridgeProperty(body.value?.[0],{details:true});
     if (!property) throw new ApiError(404, 'This property is not available from the approved IDX feed.', 'PROPERTY_UNAVAILABLE');
-    return property;
+    return {...property,dataMode:this.dataMode};
   }
 }
