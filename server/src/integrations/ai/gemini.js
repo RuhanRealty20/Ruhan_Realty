@@ -38,7 +38,7 @@ export async function generateGeminiResponse({systemInstruction,history,message,
       response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},body:JSON.stringify(body),signal:AbortSignal.timeout(18000)});
     }catch(error){
       if(attempt<2&&(error.name==='TimeoutError'||error.name==='AbortError')){await wait(350*(2**attempt));continue}
-      throw new ApiError(502,'The assistant is temporarily unavailable. Please try again or contact Ruhan.','AI_UNAVAILABLE');
+      throw new ApiError(502,'The assistant is temporarily unavailable. Please try again or use the contact page.','AI_UNAVAILABLE');
     }
     if(response.ok){
       const data=await response.json();
@@ -49,7 +49,7 @@ export async function generateGeminiResponse({systemInstruction,history,message,
     if((response.status===429||response.status>=500)&&attempt<2){await wait(400*(2**attempt));continue}
     const errorBody=await response.json().catch(()=>({}));
     logger.warn({status:response.status,code:errorBody.error?.code,model:env.GEMINI_MODEL},'Gemini request failed');
-    throw new ApiError(502,'The assistant is temporarily unavailable. Please try again or contact Ruhan.','AI_UNAVAILABLE');
+    throw new ApiError(502,'The assistant is temporarily unavailable. Please try again or use the contact page.','AI_UNAVAILABLE');
   }
   throw new ApiError(502,'The assistant is temporarily unavailable','AI_UNAVAILABLE');
 }

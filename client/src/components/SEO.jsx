@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 const siteUrl=(import.meta.env.VITE_SITE_URL||'https://ruhanrealty.com').replace(/\/$/,'');
-const siteName='Ruhan-Realty | Ruhan Syed · Miami Real Estate';
+const siteName='Ruhan-Realty | Miami Real Estate';
 
 function setMeta(name,content,property=false){
   if(content===undefined||content===null||content==='')return;
@@ -24,16 +24,16 @@ export function SEO({title,description,image='/og-default.jpg',imageAlt,titleTem
     document.title=pageTitle; document.documentElement.lang='en';
     setMeta('description',description); setMeta('robots',noindex?'noindex,nofollow':'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1');
     setMeta('googlebot',noindex?'noindex,nofollow':'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1');
-    setMeta('geo.region','US-FL'); setMeta('geo.placename','Miami'); setMeta('theme-color','#0d2d3b');
+    setMeta('geo.region','US-FL'); setMeta('geo.placename','Miami'); setMeta('theme-color','#14253D');
     setMeta('og:title',pageTitle,true); setMeta('og:description',description,true); setMeta('og:url',url,true); setMeta('og:type',type,true); setMeta('og:site_name',siteName,true); setMeta('og:locale','en_US',true); setMeta('og:image',absoluteImage,true); setMeta('og:image:alt',imageAlt||title,true);
     setMeta('twitter:card','summary_large_image'); setMeta('twitter:title',pageTitle); setMeta('twitter:description',description); setMeta('twitter:image',absoluteImage); setMeta('twitter:image:alt',imageAlt||title);
     if(publishedTime)setMeta('article:published_time',publishedTime,true); if(modifiedTime)setMeta('article:modified_time',modifiedTime,true);
     setLink('canonical',url); setLink('alternate',url,'en'); setLink('alternate',url,'x-default');
     const supplied=schema?.['@graph']||(schema?[schema]:[]);
     const graph=[
-      {'@type':'WebPage','@id':`${url}#webpage`,url,name:pageTitle,description,isPartOf:{'@id':`${siteUrl}/#website`},about:{'@id':`${siteUrl}/#ruhan-syed`},primaryImageOfPage:{'@type':'ImageObject',url:absoluteImage},inLanguage:'en-US'},
+      {'@type':'WebPage','@id':`${url}#webpage`,url,name:pageTitle,description,isPartOf:{'@id':`${siteUrl}/#website`},about:{'@id':`${siteUrl}/#real-estate-service`},primaryImageOfPage:{'@type':'ImageObject',url:absoluteImage},inLanguage:'en-US'},
       {'@type':'WebSite','@id':`${siteUrl}/#website`,url:`${siteUrl}/`,name:siteName,inLanguage:'en-US'},
-      {'@type':'Person','@id':`${siteUrl}/#ruhan-syed`,name:'Ruhan Syed',jobTitle:'Realtor Associate',url:`${siteUrl}/about`,worksFor:{'@type':'Organization',name:'Brown Harris Stevens'}},
+      {'@type':'RealEstateAgent','@id':`${siteUrl}/#real-estate-service`,name:'Ruhan-Realty',url:`${siteUrl}/`,parentOrganization:{'@type':'Organization',name:'Brown Harris Stevens'}},
       ...supplied.map(item=>{const copy={...item};delete copy['@context'];return copy}),
     ];
     const id='page-schema';document.getElementById(id)?.remove();const script=document.createElement('script');script.id=id;script.type='application/ld+json';script.text=JSON.stringify({'@context':'https://schema.org','@graph':graph});document.head.append(script);

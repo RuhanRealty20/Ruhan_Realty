@@ -17,7 +17,7 @@ export async function getAssistantKnowledge(){
       `WEBSITE PATH: ${item.type==='AREA'?`/areas/${item.slug}`:item.type==='ARTICLE'?`/insights/${item.slug}`:''}`,
       item.summary?`SUMMARY: ${clean(item.summary,500)}`:'',
       item.body?`APPROVED CONTENT: ${clean(item.body)}`:'',
-      item.factualTakeaway?`RUHAN'S REVIEWED TAKEAWAY: ${clean(item.factualTakeaway,600)}`:'',
+    item.factualTakeaway?`REVIEWED TAKEAWAY: ${clean(item.factualTakeaway,600)}`:'',
       item.source?.name?`SOURCE: ${clean(item.source.name,160)}${item.source.url?` (${clean(item.source.url,500)})`:''}`:'',
     ].filter(Boolean).join('\n')).join('\n\n');
     cache={value:`${assistantKnowledge}\n\nPUBLISHED CMS CONTENT (approved for public answers):\n${published||'No additional published CMS content is available.'}`,expiresAt:Date.now()+5*60*1000};

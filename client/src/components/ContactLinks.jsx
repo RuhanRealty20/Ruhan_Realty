@@ -3,14 +3,14 @@ import { contact } from '../data/site';
 import { track } from '../services/analytics';
 
 const socialProfiles=[
-  {key:'instagram',label:'Instagram',handle:'@ruhan_realty',mark:'@'},
-  {key:'facebook',label:'Facebook',handle:'Ruhan Realty',mark:'f'},
-  {key:'linkedin',label:'LinkedIn',handle:'Ruhan Syed',mark:'in'},
+  {key:'instagram',label:'Instagram',handle:'Miami real-estate updates',mark:'@'},
+  {key:'facebook',label:'Facebook',handle:'Property and market content',mark:'f'},
+  {key:'linkedin',label:'LinkedIn',handle:'Professional profile',mark:'in'},
 ];
 
 export function SocialLinks({labels=false,className=''}){
   const profiles=socialProfiles.filter(({key})=>contact.social[key]);
-  return <div className={`social-links ${labels?'social-links-labeled':''} ${className}`.trim()} aria-label="Ruhan Realty social profiles">
+  return <div className={`social-links ${labels?'social-links-labeled':''} ${className}`.trim()} aria-label="Social media profiles">
     {profiles.map(({key,label,handle,mark})=><a key={key} href={contact.social[key]} target="_blank" rel="noreferrer" aria-label={`${label}: ${handle}`} onClick={()=>track('social_click',{platform:key})}><b className="social-mark" aria-hidden="true">{mark}</b>{labels&&<span><strong>{label}</strong><small>{handle}</small></span>}</a>)}
   </div>;
 }

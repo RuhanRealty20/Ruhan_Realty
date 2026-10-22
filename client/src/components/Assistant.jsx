@@ -5,17 +5,17 @@ import { contact } from '../data/site';
 import { api } from '../services/api';
 import { track } from '../services/analytics';
 
-const storageKey='rr_assistant_session_v1';
-const welcome={role:'assistant',text:'Hi, I’m Ruhan’s website assistant. What are you looking to do in Miami or South Florida? I can help you clarify the next step and search authorized listings when the approved property feed is connected.'};
+const storageKey='rr_assistant_session_v2';
+const welcome={role:'assistant',text:'Hi, I’m the Miami property assistant. What are you looking to do in Miami or South Florida? I can help you clarify the next step and search authorized listings when the approved property feed is connected.'};
 const firstReplies=['Buy','Rent','Sell / List','Relocate','Invest','Ask a question'];
-const starters=[{label:'Buy',prompt:'I want to buy a home in Miami',icon:House},{label:'Rent',prompt:'I need to rent a property in Miami',icon:KeyRound},{label:'Sell / List',prompt:'I want to sell or list a property',icon:Building2},{label:'Relocate',prompt:'I am planning a move to Miami',icon:MapPinned},{label:'Invest',prompt:'I want to discuss a Miami real-estate investment',icon:ChartNoAxesCombined},{label:'Ask a question',prompt:'I have a question about Ruhan’s services',icon:MessageSquareText}];
+const starters=[{label:'Buy',prompt:'I want to buy a home in Miami',icon:House},{label:'Rent',prompt:'I need to rent a property in Miami',icon:KeyRound},{label:'Sell / List',prompt:'I want to sell or list a property',icon:Building2},{label:'Relocate',prompt:'I am planning a move to Miami',icon:MapPinned},{label:'Invest',prompt:'I want to discuss a Miami real-estate investment',icon:ChartNoAxesCombined},{label:'Ask a question',prompt:'I have a question about the real-estate services available',icon:MessageSquareText}];
 
 function restore(){
   try{const value=JSON.parse(sessionStorage.getItem(storageKey));return value&&Array.isArray(value.messages)?value:null}catch{return null}
 }
 
 export function AssistantTrigger({className='btn btn-outline',children}){
-  return <button type="button" className={className} onClick={()=>window.dispatchEvent(new Event('open-ruhan-assistant'))}><MessageSquareText size={16}/>{children||'Ask Ruhan AI'}</button>;
+  return <button type="button" className={className} onClick={()=>window.dispatchEvent(new Event('open-ruhan-assistant'))}><MessageSquareText size={16}/>{children||'Ask the assistant'}</button>;
 }
 
 function PropertyResult({property,onNavigate}){
@@ -49,34 +49,34 @@ export function Assistant(){
     try{
       const response=await api.assistant.chat({message:text,history,profile,page:location.pathname});
       setMessages(current=>[...current,{role:'assistant',text:response.reply,properties:response.properties||[],recommendations:response.recommendations||[],disclaimer:response.disclaimer}]);setProfile(response.profile||{});setQuickReplies(response.quickReplies||[]);setSuggestedPath(response.suggestedPath||'/contact');setServiceStatus(response.aiStatus||'guided-fallback');
-    }catch(err){setError(err.message);setMessages(current=>[...current,{role:'assistant',text:'I could not reach the assistant service just now. You can still contact Ruhan directly or use the website links below.'}]);setQuickReplies(['Try again','Talk to Ruhan'])}
+    }catch(err){setError(err.message);setMessages(current=>[...current,{role:'assistant',text:'I could not reach the assistant service just now. You can still use the contact page or the website links below.'}]);setQuickReplies(['Try again','Open contact page'])}
     finally{setLoading(false)}
   };
 
   const qualificationScore=Math.min(100,Object.values(profile).filter(value=>value!==''&&value!==undefined).length*18);
 
   const handleQuickReply=(reply)=>{
-    if(reply==='Talk to Ruhan'||reply==='Open contact page'){saveHandoff();track('assistant_handoff',{destination:'/contact'});close();navigate('/contact');return}
-    if(reply==='WhatsApp Ruhan'){window.open(`https://wa.me/${contact.whatsapp.replace(/\D/g,'')}`,'_blank','noopener,noreferrer');track('assistant_handoff',{channel:'whatsapp'});return}
-    if(reply==='Call Ruhan'){window.open(`tel:${contact.phone}`,'_self');track('assistant_handoff',{channel:'call'});return}
-    if(reply==='Text Ruhan'){window.open(`sms:${contact.phone}`,'_self');track('assistant_handoff',{channel:'text'});return}
+    if(reply==='Start a conversation'||reply==='Open contact page'){saveHandoff();track('assistant_handoff',{destination:'/contact'});close();navigate('/contact');return}
+    if(reply==='Open WhatsApp'){window.open(`https://wa.me/${contact.whatsapp.replace(/\D/g,'')}`,'_blank','noopener,noreferrer');track('assistant_handoff',{channel:'whatsapp'});return}
+    if(reply==='Call directly'){window.open(`tel:${contact.phone}`,'_self');track('assistant_handoff',{channel:'call'});return}
+    if(reply==='Send a text'){window.open(`sms:${contact.phone}`,'_self');track('assistant_handoff',{channel:'text'});return}
     if(reply==='Try again'){setError('');return}
     send(reply);
   };
 
   return <>
-    <button type="button" className={`assistant-launcher ${open?'is-open':''}`} aria-label="Open Ruhan-Realty AI assistant" aria-expanded={open} onClick={()=>{setOpen(true);track('assistant_open')}}><span className="assistant-launcher-icon"><Sparkles size={19}/></span><span><strong>Ask Ruhan AI</strong><small>Miami property guide</small></span></button>
+    <button type="button" className={`assistant-launcher ${open?'is-open':''}`} aria-label="Open the Miami property assistant" aria-expanded={open} onClick={()=>{setOpen(true);track('assistant_open')}}><span className="assistant-launcher-icon"><Sparkles size={19}/></span><span><strong>Property assistant</strong><small>Miami property guide</small></span></button>
     {open&&<aside className="assistant-panel" role="dialog" aria-modal="false" aria-labelledby={titleId}>
-      <header className="assistant-header"><span className="assistant-avatar"><Bot size={21}/><i/></span><span><strong id={titleId}>Ruhan-Realty Assistant</strong><small><i className={serviceStatus==='connected'?'connected':''}/>{serviceStatus==='connected'?'Gemini grounded':'Guided assistant'} · BHS support</small></span><button type="button" onClick={reset} aria-label="Start a new conversation" title="New conversation"><RefreshCw size={17}/></button><button type="button" onClick={close} aria-label="Close assistant"><X size={20}/></button></header>
+      <header className="assistant-header"><span className="assistant-avatar"><Bot size={21}/><i/></span><span><strong id={titleId}>Miami Property Assistant</strong><small><i className={serviceStatus==='connected'?'connected':''}/>{serviceStatus==='connected'?'Gemini grounded':'Guided assistant'} · BHS support</small></span><button type="button" onClick={reset} aria-label="Start a new conversation" title="New conversation"><RefreshCw size={17}/></button><button type="button" onClick={close} aria-label="Close assistant"><X size={20}/></button></header>
       {Object.keys(profile).length>0?<div className="assistant-brief"><div><span>YOUR PROPERTY BRIEF</span><b>{qualificationScore}% ready</b></div><i><span style={{width:`${qualificationScore}%`}}/></i><div className="assistant-profile" aria-label="Your search preferences">{Object.entries(profile).filter(([,value])=>value!==''&&value!==undefined).slice(0,5).map(([key,value])=><span key={key}>{key.replace(/([A-Z])/g,' $1')}: <b>{typeof value==='number'&&['minPrice','maxPrice'].includes(key)?`$${value.toLocaleString()}`:value}</b></span>)}</div></div>:<div className="assistant-introbar"><ShieldCheck size={13}/><span>Private session · Do not share sensitive information</span></div>}
       <div className="assistant-log" ref={logRef} aria-live="polite" aria-busy={loading}>
-        {messages.map((message,index)=><div className={`assistant-message ${message.role}`} key={`${message.role}-${index}`}><span className="assistant-message-label">{message.role==='assistant'?'Ruhan AI':'You'}</span><p>{message.text}</p>{index===0&&messages.length===1&&<div className="assistant-starters">{starters.map(({label,prompt,icon:Icon})=><button type="button" key={label} onClick={()=>send(prompt)}><Icon size={17}/><span>{label}</span><ChevronRight size={14}/></button>)}</div>}{message.properties?.length>0&&<div className="assistant-properties">{message.properties.map(property=><PropertyResult key={property.id} property={property} onNavigate={close}/>)}</div>}{message.recommendations?.length>0&&<div className="assistant-recommendations"><span>Recommended next steps</span>{message.recommendations.map(item=><Recommendation key={`${item.path}-${item.label}`} item={item} onNavigate={close}/>)}</div>}{message.disclaimer&&index===messages.length-1&&<small className="assistant-disclaimer"><ShieldCheck size={12}/>{message.disclaimer}</small>}</div>)}
-        {loading&&<div className="assistant-message assistant typing"><span className="assistant-message-label">Ruhan AI</span><p><i/><i/><i/><span className="sr-only">Preparing an answer</span></p></div>}
+        {messages.map((message,index)=><div className={`assistant-message ${message.role}`} key={`${message.role}-${index}`}><span className="assistant-message-label">{message.role==='assistant'?'Assistant':'You'}</span><p>{message.text}</p>{index===0&&messages.length===1&&<div className="assistant-starters">{starters.map(({label,prompt,icon:Icon})=><button type="button" key={label} onClick={()=>send(prompt)}><Icon size={17}/><span>{label}</span><ChevronRight size={14}/></button>)}</div>}{message.properties?.length>0&&<div className="assistant-properties">{message.properties.map(property=><PropertyResult key={property.id} property={property} onNavigate={close}/>)}</div>}{message.recommendations?.length>0&&<div className="assistant-recommendations"><span>Recommended next steps</span>{message.recommendations.map(item=><Recommendation key={`${item.path}-${item.label}`} item={item} onNavigate={close}/>)}</div>}{message.disclaimer&&index===messages.length-1&&<small className="assistant-disclaimer"><ShieldCheck size={12}/>{message.disclaimer}</small>}</div>)}
+        {loading&&<div className="assistant-message assistant typing"><span className="assistant-message-label">Assistant</span><p><i/><i/><i/><span className="sr-only">Preparing an answer</span></p></div>}
       </div>
       <div className="assistant-actions">{quickReplies.map(reply=><button type="button" key={reply} onClick={()=>handleQuickReply(reply)}>{reply}</button>)}</div>
       {error&&<p className="assistant-error" role="alert">{error}</p>}
       <form className="assistant-compose" onSubmit={event=>{event.preventDefault();send()}}><label className="sr-only" htmlFor={`${titleId}-input`}>Ask about Miami real estate</label><textarea id={`${titleId}-input`} ref={inputRef} rows="1" maxLength="1500" value={input} onChange={event=>setInput(event.target.value)} onKeyDown={event=>{if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}}} placeholder="Ask about areas, budget, property type…"/><button type="submit" disabled={!input.trim()||loading} aria-label="Send message">{loading?<LoaderCircle className="assistant-spin" size={18}/>:<Send size={18}/>}</button></form>
-      <footer className="assistant-footer"><span>AI guidance, verified listings only</span><Link to={suggestedPath} onClick={()=>{saveHandoff();track('assistant_handoff',{destination:suggestedPath});close()}}>Continue with Ruhan <ArrowUpRight size={13}/></Link></footer>
+      <footer className="assistant-footer"><span>AI guidance, verified listings only</span><Link to={suggestedPath} onClick={()=>{saveHandoff();track('assistant_handoff',{destination:suggestedPath});close()}}>Continue your plan <ArrowUpRight size={13}/></Link></footer>
     </aside>}
   </>;
 }
