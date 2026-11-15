@@ -44,6 +44,12 @@ const listValue = (value) => {
 
 const unique = (items) => [...new Set(items.filter(Boolean))];
 
+const displayText = (value) => unique(listValue(value)).join(', ');
+
+const displayBoolean = (value) => value === true ? 'Yes' : value === false ? 'No' : '';
+
+const detailItem = (label, value) => ({ label, value });
+
 const displayNumber = (value) => {
   const number = safeNumber(value);
   return number === undefined ? '' : new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(number);
@@ -106,6 +112,8 @@ export function normalizeBridgeProperty(property,{details=false}={}) {
   const lotSquareFeet=safeNumber(property.LotSizeSquareFeet);
   const associationFee=safeNumber(property.AssociationFee);
   const lotDisplay=lotSquareFeet?`${displayNumber(lotSquareFeet)} sq ft`:property.LotSizeArea?`${displayNumber(property.LotSizeArea)} ${property.LotSizeUnits||''}`.trim():'';
+  const stories=safeNumber(property.Stories)||safeNumber(property.Levels);
+  const rooms=safeNumber(property.RoomsTotal);
   const facts=[
     {label:'Bedrooms',value:displayNumber(property.BedroomsTotal)},
     {label:'Bathrooms',value:displayNumber(property.BathroomsTotalInteger??property.BathroomsTotalDecimal)},
@@ -114,6 +122,8 @@ export function normalizeBridgeProperty(property,{details=false}={}) {
     {label:'Year built',value:property.YearBuilt?String(property.YearBuilt):''},
     {label:'Parking',value:safeNumber(property.ParkingTotal)!==undefined?`${displayNumber(property.ParkingTotal)} spaces`:''},
     {label:'Garage',value:safeNumber(property.GarageSpaces)!==undefined?`${displayNumber(property.GarageSpaces)} spaces`:''},
+    {label:'Rooms',value:rooms!==undefined?displayNumber(rooms):''},
+    {label:'Stories',value:stories!==undefined?displayNumber(stories):''},
     {label:'Lot size',value:lotDisplay},
     {label:'Days on market',value:displayNumber(property.DaysOnMarket)},
     {label:'Association fee',value:associationFee?`${money.format(associationFee)}${property.AssociationFeeFrequency?` / ${String(property.AssociationFeeFrequency).toLowerCase()}`:''}`:''},
@@ -121,11 +131,54 @@ export function normalizeBridgeProperty(property,{details=false}={}) {
     {label:'Status',value:property.MlsStatus||property.StandardStatus},
   ].filter((fact)=>fact.value!==''&&fact.value!==undefined&&fact.value!==null);
   const featureSections=[
-    {title:'Interior',items:unique([...listValue(property.InteriorFeatures),...listValue(property.Appliances),...listValue(property.Flooring),...listValue(property.LaundryFeatures)])},
+    {title:'Interior',items:unique([...listValue(property.InteriorFeatures),...listValue(property.Appliances),...listValue(property.Flooring),...listValue(property.LaundryFeatures),...listValue(property.FireplaceFeatures)])},
     {title:'Building & exterior',items:unique([...listValue(property.ArchitecturalStyle),...listValue(property.ConstructionMaterials),...listValue(property.ExteriorFeatures),...listValue(property.PatioAndPorchFeatures),...listValue(property.Roof)])},
-    {title:'Amenities',items:unique([...listValue(property.AssociationAmenities),...listValue(property.BuildingFeatures),...listValue(property.CommunityFeatures),...listValue(property.PoolFeatures)])},
-    {title:'Setting & views',items:unique([...listValue(property.View),...listValue(property.WaterfrontFeatures),...listValue(property.LotFeatures)])},
+    {title:'Amenities',items:unique([...listValue(property.AssociationAmenities),...listValue(property.BuildingFeatures),...listValue(property.CommunityFeatures),...listValue(property.PoolFeatures),...listValue(property.SpaFeatures)])},
+    {title:'Setting & views',items:unique([...listValue(property.View),...listValue(property.WaterfrontFeatures),...listValue(property.LotFeatures),...listValue(property.Vegetation)])},
+    {title:'Parking & access',items:unique([...listValue(property.ParkingFeatures),...listValue(property.AccessibilityFeatures),...listValue(property.EntryLocation)])},
   ].filter((section)=>section.items.length);
+
+  const detailGroups=[
+    {title:'Property & construction',items:[
+      detailItem('Property subtype',displayText(property.PropertySubType)),detailItem('Structure type',displayText(property.StructureType)),
+      detailItem('Architectural style',displayText(property.ArchitecturalStyle)),detailItem('Construction',displayText(property.ConstructionMaterials)),
+      detailItem('Property condition',displayText(property.PropertyCondition)),detailItem('Roof',displayText(property.Roof)),
+      detailItem('Foundation',displayText(property.FoundationDetails)),detailItem('Levels',displayText(property.Levels)||displayNumber(stories)),
+      detailItem('Year built',property.YearBuilt?String(property.YearBuilt):''),detailItem('Year built details',displayText(property.YearBuiltDetails)),
+    ]},
+    {title:'Interior & systems',items:[
+      detailItem('Interior features',displayText(property.InteriorFeatures)),detailItem('Appliances',displayText(property.Appliances)),
+      detailItem('Flooring',displayText(property.Flooring)),detailItem('Laundry',displayText(property.LaundryFeatures)),
+      detailItem('Heating',displayText(property.Heating)),detailItem('Cooling',displayText(property.Cooling)),
+      detailItem('Fireplace',displayText(property.FireplaceFeatures)||displayBoolean(property.FireplaceYN)),detailItem('Security',displayText(property.SecurityFeatures)),
+      detailItem('Utilities',displayText(property.Utilities)),detailItem('Electric',displayText(property.Electric)),
+      detailItem('Water source',displayText(property.WaterSource)),detailItem('Sewer',displayText(property.Sewer)),
+    ]},
+    {title:'Exterior, land & views',items:[
+      detailItem('Exterior features',displayText(property.ExteriorFeatures)),detailItem('Patio and porch',displayText(property.PatioAndPorchFeatures)),
+      detailItem('Lot features',displayText(property.LotFeatures)),detailItem('Fencing',displayText(property.Fencing)),
+      detailItem('Pool',displayText(property.PoolFeatures)||displayBoolean(property.PoolPrivateYN)),detailItem('Spa',displayText(property.SpaFeatures)||displayBoolean(property.SpaYN)),
+      detailItem('Waterfront',displayText(property.WaterfrontFeatures)||displayBoolean(property.WaterfrontYN)),detailItem('View',displayText(property.View)),
+      detailItem('Vegetation',displayText(property.Vegetation)),
+    ]},
+    {title:'Community & association',items:[
+      detailItem('Building name',displayText(property.BuildingName)),detailItem('Subdivision',displayText(property.SubdivisionName)),
+      detailItem('Association amenities',displayText(property.AssociationAmenities)),detailItem('Building features',displayText(property.BuildingFeatures)),
+      detailItem('Community features',displayText(property.CommunityFeatures)),detailItem('Association fee includes',displayText(property.AssociationFeeIncludes)),
+      detailItem('Common interest',displayText(property.CommonInterest)),detailItem('Pets allowed',displayText(property.PetsAllowed)),
+    ]},
+    {title:'Parking & access',items:[
+      detailItem('Parking features',displayText(property.ParkingFeatures)),detailItem('Total parking',safeNumber(property.ParkingTotal)!==undefined?displayNumber(property.ParkingTotal):''),
+      detailItem('Garage spaces',safeNumber(property.GarageSpaces)!==undefined?displayNumber(property.GarageSpaces):''),detailItem('Carport spaces',safeNumber(property.CarportSpaces)!==undefined?displayNumber(property.CarportSpaces):''),
+      detailItem('Accessibility',displayText(property.AccessibilityFeatures)),detailItem('Entry level',displayNumber(property.EntryLevel)),detailItem('Entry location',displayText(property.EntryLocation)),
+    ]},
+    {title:'Financial & terms',items:[
+      detailItem('Annual taxes',safeNumber(property.TaxAnnualAmount)!==undefined?money.format(property.TaxAnnualAmount):''),detailItem('Tax year',displayNumber(property.TaxYear)),
+      detailItem('Ownership',displayText(property.Ownership)),detailItem('Listing terms',displayText(property.ListingTerms)),
+      detailItem('Possession',displayText(property.Possession)),detailItem('Furnished',displayText(property.Furnished)),
+      detailItem('Land lease',displayBoolean(property.LandLeaseYN)),detailItem('Zoning',displayText(property.ZoningDescription)||displayText(property.Zoning)),
+    ]},
+  ].map((group)=>({...group,items:group.items.filter((item)=>item.value!==''&&item.value!==undefined&&item.value!==null)})).filter((group)=>group.items.length);
 
   const normalized={
     id,
@@ -155,6 +208,7 @@ export function normalizeBridgeProperty(property,{details=false}={}) {
     photoCount:safeNumber(property.PhotosCount)??photos.length,
     facts,
     featureSections,
+    detailGroups,
     listingId:property.ListingId||id,
     standardStatus:property.StandardStatus,
     mlsStatus:property.MlsStatus,

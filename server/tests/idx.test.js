@@ -33,9 +33,12 @@ describe('Bridge IDX adapter',()=>{
   });
 
   it('returns expanded facts and gallery data for a property detail page',()=>{
-    const property=normalizeBridgeProperty({...sample,LivingArea:1420,YearBuilt:2019,InteriorFeatures:['Walk-In Closet'],AssociationAmenities:['Pool']},{details:true});
+    const property=normalizeBridgeProperty({...sample,LivingArea:1420,YearBuilt:2019,InteriorFeatures:['Walk-In Closet'],AssociationAmenities:['Pool'],Appliances:['Dishwasher'],Cooling:['Central Air'],ParkingFeatures:['Covered'],Latitude:25.7907,Longitude:-80.13},{details:true});
     expect(property.gallery).toHaveLength(1);
     expect(property.facts).toEqual(expect.arrayContaining([{label:'Interior',value:'1,420 sq ft'},{label:'Year built',value:'2019'}]));
     expect(property.featureSections.flatMap(section=>section.items)).toContain('Walk-In Closet');
+    expect(property.featureSections.flatMap(section=>section.items)).toContain('Covered');
+    expect(property.detailGroups.flatMap(group=>group.items)).toEqual(expect.arrayContaining([{label:'Cooling',value:'Central Air'},{label:'Appliances',value:'Dishwasher'}]));
+    expect(property.latitude).toBe(25.7907);
   });
 });

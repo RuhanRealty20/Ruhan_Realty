@@ -449,3 +449,39 @@ body{background:#fff;color:#24282e}.section:not(.dark-section):not(.editorial-se
 @media(max-width:1050px){.property-detail-grid{grid-template-columns:minmax(0,1fr) 330px}.property-fact-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.property-gallery-thumbs{grid-template-columns:repeat(6,minmax(0,1fr))}.property-gallery-thumbs button:nth-child(n+7){display:none}.property-additional-grid{grid-template-columns:1fr}}
 @media(max-width:760px){.property-detail-heading{display:grid;align-items:start}.property-detail-heading>div:last-child{padding:1rem 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.24);text-align:left}.property-gallery-main{height:min(112vw,520px);border-radius:11px}.property-gallery-thumbs{grid-template-columns:repeat(4,minmax(0,1fr))}.property-gallery-thumbs button{height:72px}.property-gallery-thumbs button:nth-child(n+5){display:none}.property-detail-grid{grid-template-columns:1fr}.property-fact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.property-feature-grid{grid-template-columns:1fr}.property-detail-content .property-ruhan-card{position:static}.property-copy-section>p{font-size:.92rem}.property-section-heading h2{font-size:2.25rem}}
 @media(max-width:430px){.property-fact-grid{grid-template-columns:1fr 1fr}.property-gallery-thumbs button{height:62px}.property-detail-heading h1{font-size:2.55rem}.property-detail-heading>div:last-child strong{font-size:2rem}}
+
+/* Property amenities, complete IDX facts, and map */
+.property-section-intro{max-width:690px;margin:-.7rem 0 1.35rem;color:#68757c;font-size:.84rem;line-height:1.7}
+.property-feature-grid article{position:relative;overflow:hidden;background:linear-gradient(145deg,#fff 55%,#f5f0e7)}
+.property-feature-grid article::after{content:'';position:absolute;right:-38px;top:-38px;width:90px;height:90px;border:1px solid rgba(181,154,104,.22);border-radius:50%;pointer-events:none}
+.property-feature-grid h3{position:relative;z-index:1;color:#203848}
+.property-feature-grid ul{grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+.property-feature-grid li{min-width:0;align-items:center;gap:.65rem;padding:.62rem;border:1px solid #e4ddd2;border-radius:10px;background:rgba(255,255,255,.78);color:#465861;line-height:1.35}
+.property-feature-grid li>span:last-child{min-width:0;overflow-wrap:anywhere}
+.property-amenity-icon{width:31px;height:31px;display:grid;flex:0 0 31px;place-items:center;border:1px solid #dbc9a8;border-radius:50%;background:#f5eee2;color:#8a6d3d}
+.property-feature-grid li .property-amenity-icon svg{margin:0;color:inherit}
+.property-detail-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem}
+.property-detail-groups>article{min-width:0;overflow:hidden;border:1px solid #d9d1c5;border-radius:14px;background:#fff;box-shadow:0 12px 30px rgba(20,37,61,.04)}
+.property-detail-groups h3{display:flex;align-items:center;gap:.55rem;margin:0;padding:1rem 1.15rem;border-bottom:1px solid #e2dbd0;background:#f5f1e9;color:#253d4c;font-family:var(--font-display);font-size:1.12rem}
+.property-detail-groups h3 svg{color:#9b8153}
+.property-detail-groups dl{margin:0;padding:.35rem 1.15rem .65rem}
+.property-detail-groups dl>div{display:grid;grid-template-columns:minmax(110px,.72fr) minmax(0,1.28fr);gap:1rem;padding:.7rem 0;border-bottom:1px solid #eee9e1}
+.property-detail-groups dl>div:last-child{border-bottom:0}
+.property-detail-groups dt{color:#7a858a;font-size:.62rem;font-weight:750;letter-spacing:.05em;text-transform:uppercase}
+.property-detail-groups dd{min-width:0;margin:0;color:#334852;font-size:.72rem;font-weight:650;text-align:right;overflow-wrap:anywhere}
+.property-map-section{padding:clamp(4rem,8vw,7rem) 0;background:#fff}
+.property-map-heading{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:1.4rem}
+.property-map-heading .property-section-heading h2{margin-bottom:0}
+.property-map-shell{position:relative;min-height:510px;overflow:hidden;border:1px solid #d7cec0;border-radius:18px;background:#ece7de;box-shadow:0 25px 65px rgba(20,37,61,.12)}
+.property-map-shell iframe{display:block;width:100%;height:510px;border:0;filter:saturate(.72) contrast(.96)}
+.property-map-card{position:absolute;left:1.25rem;bottom:1.25rem;width:min(360px,calc(100% - 2.5rem));display:grid;padding:1.15rem 1.2rem;border:1px solid rgba(255,255,255,.7);border-radius:13px;background:rgba(255,255,255,.93);box-shadow:0 15px 40px rgba(20,37,61,.18);backdrop-filter:blur(10px)}
+.property-map-card>span{display:flex;align-items:center;gap:.4rem;color:#8a6d3d;font-size:.58rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+.property-map-card strong{margin-top:.42rem;color:#213947;font-family:var(--font-display);font-size:1.2rem;line-height:1.25}
+.property-map-card p{margin:.2rem 0 0;color:#65737a;font-size:.7rem}
+.property-map-card small{margin-top:.6rem;padding-top:.6rem;border-top:1px solid #ddd4c8;color:#77643e;font-size:.58rem;line-height:1.45}
+.property-map-placeholder{min-height:510px;display:grid;place-content:center;justify-items:center;padding:2rem;text-align:center;background:linear-gradient(rgba(246,243,237,.8),rgba(231,223,211,.9)),var(--miami-sketch)}
+.property-map-placeholder svg{color:#9b8153}.property-map-placeholder h3{margin:.8rem 0 .2rem;font-family:var(--font-display);font-size:1.55rem}.property-map-placeholder p{max-width:430px;margin:0;color:#65737a}
+.property-map-attribution{margin:.65rem 0 0;color:#7a8489;font-size:.58rem;text-align:right}.property-map-attribution a{text-decoration:underline;text-underline-offset:2px}
+
+@media(max-width:900px){.property-feature-grid ul{grid-template-columns:1fr}.property-detail-groups{grid-template-columns:1fr}.property-map-shell,.property-map-shell iframe,.property-map-placeholder{min-height:440px;height:440px}}
+@media(max-width:620px){.property-map-heading{align-items:start;flex-direction:column}.property-map-heading .btn{width:100%}.property-map-shell{min-height:500px}.property-map-shell iframe{height:500px}.property-map-card{left:.75rem;bottom:.75rem;width:calc(100% - 1.5rem)}.property-detail-groups dl>div{grid-template-columns:1fr;gap:.2rem}.property-detail-groups dd{text-align:left}.property-map-attribution{text-align:left}.property-feature-grid li{padding:.72rem}}
