@@ -8,7 +8,7 @@
     "assets:optimize": "node scripts/optimizeAssets.js",
     "sitemap": "node scripts/generateSitemap.js",
     "prebuild": "npm run assets:optimize && npm run sitemap",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerenderSeo.js",
     "preview": "vite preview",
     "lint": "eslint . --max-warnings=0"
   },
@@ -29,5 +29,6 @@
     "globals": "latest",
     "sharp": "latest",
     "vite": "8.3.0"
-  }
+  },
+  "engines": { "node": ">=24.0.0 <25.0.0" }
 }

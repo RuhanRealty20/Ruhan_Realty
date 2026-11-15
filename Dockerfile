@@ -14,5 +14,6 @@ COPY package*.json ./
 COPY server/package*.json server/
 RUN npm ci --omit=dev -w server
 COPY server server
+COPY --from=build /app/client/dist client/dist
 EXPOSE 5000
 CMD ["npm","run","start","-w","server"]

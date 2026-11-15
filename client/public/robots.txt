@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /api/
+Disallow: /*?*utm_*
 Disallow: /properties?*
-Sitemap: https://ruhanrealty.com/sitemap.xml
 
+Sitemap: https://ruhanrealty.com/sitemap.xml

@@ -4,8 +4,8 @@ const siteUrl=(import.meta.env.VITE_SITE_URL||'https://ruhanrealty.com').replace
 const siteName='Ruhan-Realty | Miami Real Estate';
 
 function setMeta(name,content,property=false){
-  if(content===undefined||content===null||content==='')return;
   const attribute=property?'property':'name'; let element=document.head.querySelector(`meta[${attribute}="${name}"]`);
+  if(content===undefined||content===null||content===''){element?.remove();return}
   if(!element){element=document.createElement('meta');element.setAttribute(attribute,name);document.head.append(element)}
   element.setAttribute('content',String(content));
 }
@@ -27,13 +27,15 @@ export function SEO({title,description,image='/og-default.jpg',imageAlt,titleTem
     setMeta('geo.region','US-FL'); setMeta('geo.placename','Miami'); setMeta('theme-color','#14253D');
     setMeta('og:title',pageTitle,true); setMeta('og:description',description,true); setMeta('og:url',url,true); setMeta('og:type',type,true); setMeta('og:site_name',siteName,true); setMeta('og:locale','en_US',true); setMeta('og:image',absoluteImage,true); setMeta('og:image:alt',imageAlt||title,true);
     setMeta('twitter:card','summary_large_image'); setMeta('twitter:title',pageTitle); setMeta('twitter:description',description); setMeta('twitter:image',absoluteImage); setMeta('twitter:image:alt',imageAlt||title);
-    if(publishedTime)setMeta('article:published_time',publishedTime,true); if(modifiedTime)setMeta('article:modified_time',modifiedTime,true);
+    setMeta('article:published_time',publishedTime,true); setMeta('article:modified_time',modifiedTime,true);
     setLink('canonical',url); setLink('alternate',url,'en'); setLink('alternate',url,'x-default');
     const supplied=schema?.['@graph']||(schema?[schema]:[]);
+    const segments=canonicalPath.split('/').filter(Boolean);const breadcrumbItems=[{'@type':'ListItem',position:1,name:'Home',item:`${siteUrl}/`},...segments.map((segment,index)=>({'@type':'ListItem',position:index+2,name:index===segments.length-1?title:segment.replaceAll('-',' ').replace(/\b\w/g,letter=>letter.toUpperCase()),item:`${siteUrl}/${segments.slice(0,index+1).join('/')}`}))];
     const graph=[
       {'@type':'WebPage','@id':`${url}#webpage`,url,name:pageTitle,description,isPartOf:{'@id':`${siteUrl}/#website`},about:{'@id':`${siteUrl}/#real-estate-service`},primaryImageOfPage:{'@type':'ImageObject',url:absoluteImage},inLanguage:'en-US'},
       {'@type':'WebSite','@id':`${siteUrl}/#website`,url:`${siteUrl}/`,name:siteName,inLanguage:'en-US'},
       {'@type':'RealEstateAgent','@id':`${siteUrl}/#real-estate-service`,name:'Ruhan-Realty',url:`${siteUrl}/`,parentOrganization:{'@type':'Organization',name:'Brown Harris Stevens'}},
+      ...(segments.length?[{'@type':'BreadcrumbList','@id':`${url}#breadcrumb`,itemListElement:breadcrumbItems}]:[]),
       ...supplied.map(item=>{const copy={...item};delete copy['@context'];return copy}),
     ];
     const id='page-schema';document.getElementById(id)?.remove();const script=document.createElement('script');script.id=id;script.type='application/ld+json';script.text=JSON.stringify({'@context':'https://schema.org','@graph':graph});document.head.append(script);

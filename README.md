@@ -50,7 +50,7 @@ docs/                     launch and integration notes
 
 ## Local setup
 
-Requirements: Node.js 24 LTS+, npm 11+, and a MongoDB Atlas database (or local compatible MongoDB for development).
+Requirements: Node.js 24 LTS (`24.22.1` is pinned for Render), npm 11+, and a MongoDB Atlas database (or local compatible MongoDB for development).
 
 1. Copy `client/.env.example` to `client/.env` and `server/.env.example` to `server/.env`.
 2. Set `MONGODB_URI`, strong independent JWT secrets, frontend/backend origins, and approved public contact values.
@@ -97,6 +97,7 @@ npm run lint                   # both workspaces
 npm run test                   # API contract tests
 npm run build                  # optimized production client
 npm run check                  # lint + tests + build
+npm run production:check       # full gate plus production-artifact/SEO/secret checks
 npm run assets:optimize -w client
 npm run sitemap -w client
 npm run seed:demo -w server    # draft labels only; never fake public facts
@@ -136,16 +137,9 @@ The analytics service emits `page_view`, `property_view`, `search`, `search_filt
 
 ## Deployment
 
-Recommended split deployment:
+Render deployment is configured through the root [`render.yaml`](render.yaml). One Node web service builds the separate React client and Express backend, then Express serves `client/dist` and `/api/v1` from the same HTTPS origin. This provides reliable admin refresh cookies, correct direct-route/404 behavior, immutable asset caching and one database-aware readiness check. MongoDB remains on Atlas and SMTP/IDX/Gemini credentials remain server-only.
 
-- Static/CDN host for `client/dist`, with SPA fallback to `index.html`, immutable hashed assets and short-cache HTML.
-- Container or Node host for `server`, behind TLS and a trusted proxy, with health checks on `/api/v1/health`.
-- MongoDB Atlas plus a transactional SMTP provider. Keep staging and production secrets separate.
-- Route `/api` to the backend at the edge or set `VITE_API_URL` before building.
-- Set `NODE_ENV=production`, precise `ALLOWED_ORIGINS`, `TRUST_PROXY`, independent 32+ character JWT secrets and secure contact/provider values.
-- Add monitoring for 5xx rates, lead-notification failure, database health, IDX failure/staleness and authentication abuse. Logs redact authorization, cookies, passwords and tokens.
-
-The included Dockerfile builds the client and provides an API runtime stage. A deployment platform may serve the client artifact separately; do not expose source maps publicly unless access is controlled.
+Follow [`docs/RENDER_DEPLOYMENT.md`](docs/RENDER_DEPLOYMENT.md) for Blueprint creation, secrets, admin setup, DNS, smoke tests, Search Console and rollback. The included Dockerfile implements the same combined production runtime for container deployment. Production source maps are disabled.
 
 ## SEO launch checklist
 

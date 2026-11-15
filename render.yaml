@@ -1,0 +1,90 @@
+services:
+  - type: web
+    name: ruhan-realty
+    runtime: node
+    region: virginia
+    buildCommand: npm ci --include=dev && npm run build && npm prune --omit=dev
+    startCommand: npm run start -w server
+    healthCheckPath: /api/v1/health
+    autoDeployTrigger: commit
+    domains:
+      - ruhanrealty.com
+    envVars:
+      - key: NODE_VERSION
+        value: 24.22.1
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        value: https://ruhanrealty.com
+      - key: ALLOWED_ORIGINS
+        value: https://ruhanrealty.com,https://www.ruhanrealty.com,https://ruhan-realty.onrender.com
+      - key: TRUST_PROXY
+        value: 1
+      - key: VITE_API_URL
+        value: /api/v1
+      - key: VITE_SITE_URL
+        value: https://ruhanrealty.com
+      - key: VITE_RUHAN_PHONE
+        value: "+14078402959"
+      - key: VITE_RUHAN_EMAIL
+        value: rsyed@bhsusa.com
+      - key: VITE_WHATSAPP_NUMBER
+        value: "+14078402959"
+      - key: VITE_BHS_PROFILE_URL
+        value: "https://bhsmiami.com/bhs_miami_profiles.asp?PPD=3647548&RNAME=Ruhan+Syed"
+      - key: VITE_BHS_OFFICE_PHONE
+        value: "+13056951111"
+      - key: VITE_BHS_OFFICE_ADDRESS
+        value: Miami Beach Continuum - 40 South Pointe Drive, Suite 110, Miami Beach, FL 33139
+      - key: VITE_INSTAGRAM_URL
+        value: https://www.instagram.com/ruhan_realty/
+      - key: VITE_LINKEDIN_URL
+        value: https://www.linkedin.com/in/ruhan-syed-49068b176
+      - key: VITE_FACEBOOK_URL
+        sync: false
+      - key: VITE_ENABLE_DEMO_PROPERTIES
+        value: false
+      - key: VITE_GA4_ID
+        sync: false
+      - key: VITE_GOOGLE_SITE_VERIFICATION
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_TTL
+        value: 15m
+      - key: JWT_REFRESH_TTL
+        value: 7d
+      - key: EMAIL_PROVIDER
+        value: smtp
+      - key: EMAIL_FROM
+        sync: false
+      - key: LEAD_NOTIFICATION_EMAIL
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: IDX_PROVIDER
+        value: bridge
+      - key: IDX_API_URL
+        sync: false
+      - key: IDX_API_KEY
+        sync: false
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      - key: GEMINI_API_BASE
+        value: https://generativelanguage.googleapis.com/v1beta
+      - key: LOG_LEVEL
+        value: info

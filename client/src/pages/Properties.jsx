@@ -52,7 +52,7 @@ export default function Properties(){
   useEffect(()=>{search()},[]);
 
   return <>
-    <SEO title="Miami Properties" description="Search approved Miami and South Florida MLS/IDX listings with personal guidance supported by Brown Harris Stevens." noindex/>
+    <SEO title="Miami Properties" description="Search approved Miami and South Florida MLS/IDX listings with personal guidance supported by Brown Harris Stevens." noindex={params.size>0}/>
     <PageHero eyebrow="Miami property discovery" title="Search Miami properties." intro="A focused search experience built for an approved Miami REALTORS/MLS/IDX feed, with personal guidance supported by Brown Harris Stevens." image={editorialImages.beach}/>
     <section className="section-tight"><div className="container"><form className="card search-panel property-search-panel" onSubmit={(event)=>search(event,{...filters,page:1})}>
       <div className="field"><label htmlFor="location">City, area or ZIP code</label><input id="location" value={filters.location} onChange={event=>setFilters({...filters,location:event.target.value})} placeholder="Brickell, Miami Beach…"/></div>

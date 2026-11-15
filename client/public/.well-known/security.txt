@@ -1,0 +1,4 @@
+Contact: mailto:rsyed@bhsusa.com
+Canonical: https://ruhanrealty.com/.well-known/security.txt
+Preferred-Languages: en
+Expires: 2027-11-15T00:00:00.000Z

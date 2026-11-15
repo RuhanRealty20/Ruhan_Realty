@@ -1,9 +1,10 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { PublicLayout } from './layouts/PublicLayout';
 import { AdminLayout } from './layouts/AdminLayout';
 import { LoadingSkeleton } from './components/ui';
 import { usePageTracking } from './hooks/usePageTracking';
+import { api } from './services/api';
 
 const Home = lazy(() => import('./pages/Home'));
 const Properties = lazy(() => import('./pages/Properties'));
@@ -32,7 +33,10 @@ function RouteTracker() {
 function ProtectedAdmin({ children }) {
   const location = useLocation();
   const token = sessionStorage.getItem('rr_access_token');
-  return token ? children : <Navigate to="/admin/login" replace state={{ from: location }} />;
+  const [status,setStatus]=useState(token?'ready':'checking');
+  useEffect(()=>{if(token)return;let active=true;api.auth.refresh().then(()=>{if(active)setStatus('ready')}).catch(()=>{if(active)setStatus('login')});return()=>{active=false}},[token]);
+  if(status==='checking')return <div className="page-loader"><LoadingSkeleton lines={3}/></div>;
+  return status==='ready' ? children : <Navigate to="/admin/login" replace state={{ from: location }} />;
 }
 
 export function App() {

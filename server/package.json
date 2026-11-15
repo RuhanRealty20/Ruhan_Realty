@@ -36,5 +36,5 @@
     "supertest": "latest",
     "vitest": "latest"
   },
-  "engines": { "node": ">=24.0.0" }
+  "engines": { "node": ">=24.0.0 <25.0.0" }
 }
